@@ -1,38 +1,33 @@
 import React, { Component } from "react"
 import ReactDOM from "react-dom"
-import Slider from "@material-ui/core/Slider"
-import Search from "@material-ui/icons/Search"
 
 class GridRangeValues extends Component {
   constructor(props) {
     super(props)
+
+    console.log(props)
+
     this.state = {
-      value: this.props.value,
+      value: props.value,
     }
   }
 
   getInputNode() {
-    return ReactDOM.findDOMNode(this).getElementsByTagName("input")[0]
+    return ReactDOM.findDOMNode(this)
   }
 
   onBlur = () => {
     this.props.onCommit()
   }
 
-  onChange = (event, new_value) => {
+  onChange = event => {
     this.setState({
-      value: new_value,
+      [this.props.column.key]: Math.min(100, Math.max(0, event.target.value)),
     })
   }
 
-  display_value = (value, index) => {
-    return `${value}`
-  }
-
-  getValue() {
-    let update = {}
-    update[this.props.column.key] = this.state.value
-    return update
+  getValue = () => {
+    return { value: this.state.value }
   }
 
   getStyle = () => {
@@ -42,7 +37,7 @@ class GridRangeValues extends Component {
     }
   }
 
-  disableContainerStyles() {
+  disableStyle = () => {
     return {
       backgroundColor: "#A4A4A4",
       fontWeight: 600,
@@ -53,8 +48,8 @@ class GridRangeValues extends Component {
   render() {
     return (
       <div style={{ display: "flex",
-      justifyContent: "space-around",
-      alignItems: "center", }}>
+          justifyContent: "space-around",
+          alignItems: "center", }}>
         <div style={{
             width: "80%",
           }}>
@@ -72,15 +67,15 @@ class GridRangeValues extends Component {
               onChange={this.onChange}
               getAriaValueText={this.display_value}
             />
-            </div>
-            <div>
+        </div>
+        <div>
             <Search
               style={{
                 fontSize: "90%",
               }}
               color="primary"
             />
-            </div>
+        </div>
       </div>
     )
   }
