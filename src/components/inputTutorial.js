@@ -49,7 +49,7 @@ class InputTutorial extends Component {
                   found on the{" "}
                   <a
                     href="https://www.google.com/covid19/mobility/data_documentation.html?hl=en"
-                    target="_blank"
+                    target="_blank" rel="noopener noreferrer"
                   >
                     Google COVID-19 Community Mobility Reports
                   </a>
