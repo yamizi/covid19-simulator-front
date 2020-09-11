@@ -30,6 +30,7 @@ import Menu from "@material-ui/core/Menu"
 import InputTutorial from "./inputTutorial"
 
 import LoadSaveDialog from "./load_save_scenarios"
+import { countries, scenarios, measureTypes } from "./constants"
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
@@ -38,172 +39,6 @@ import {
     ExpansionPanelDetails,
     ExpansionPanelSummary,
 } from "@material-ui/core"
-
-const scenarios = [
-    {
-        id: "scenario-brutal-exit",
-        mitigations: [
-            //{id:0, measure:"Essential groceries",date:"2020-05-11",value:100},
-            { id: 1, measure: "Workplaces", date: "2020-05-11", value: 100 },
-            //{id:2, measure:"School & Universities",date:"2020-05-11",value:100},
-            {
-                id: 3,
-                measure: "Parks & outdoor activities",
-                date: "2020-05-11",
-                value: 100,
-            },
-            {
-                id: 4,
-                measure: "Public transport",
-                date: "2020-05-11",
-                value: 100,
-            },
-            {
-                id: 5,
-                measure: "Retail & Recreation",
-                date: "2020-05-11",
-                value: 100,
-            },
-            //{id:6, measure:"International travels",date:"2020-05-11",value:100}
-        ],
-    },
-    /* {
-        id: "scenario-brutal-exit-closed-borders",
-        mitigations: [
-            { id: 0, measure: "Essential groceries", date: "2020-05-11", value: 100 },
-            { id: 1, measure: "Workplaces", date: "2020-05-11", value: 100 },
-            //{id:2, measure:"School & Universities",date:"2020-05-11",value:100},
-            { id: 3, measure: "Parks & outdoor activities", date: "2020-05-11", value: 100 },
-            { id: 4, measure: "Public transport", date: "2020-05-11", value: 100 },
-            { id: 5, measure: "Retail & Recreation", date: "2020-05-11", value: 100 },
-            //{id:6, measure:"International travels",date:"2020-05-11",value:0}
-        ]
-    }, */
-    {
-        id: "scenario-cyclic-exit",
-        mitigations: [
-            //{id:0, measure:"Essential groceries",date:"2020-05-11",value:100},
-            { id: 1, measure: "Workplaces", date: "2020-05-11", value: 100 },
-            //{id:2, measure:"School & Universities",date:"2020-05-11",value:100},
-            {
-                id: 3,
-                measure: "Parks & outdoor activities",
-                date: "2020-05-11",
-                value: 100,
-            },
-            {
-                id: 4,
-                measure: "Public transport",
-                date: "2020-05-11",
-                value: 100,
-            },
-            {
-                id: 5,
-                measure: "Retail & Recreation",
-                date: "2020-05-11",
-                value: 100,
-            },
-            //{id:6, measure:"International travels",date:"2020-05-11",value:100},
-
-            {
-                id: 7,
-                measure: "Essential groceries",
-                date: "2020-06-08",
-                value: 20,
-            },
-            { id: 8, measure: "Workplaces", date: "2020-06-08", value: 20 },
-            //{id:9, measure:"School & Universities",date:"2020-06-08",value:0},
-            {
-                id: 10,
-                measure: "Parks & outdoor activities",
-                date: "2020-06-08",
-                value: 0,
-            },
-            {
-                id: 11,
-                measure: "Public transport",
-                date: "2020-06-08",
-                value: 0,
-            },
-            {
-                id: 12,
-                measure: "Retail & Recreation",
-                date: "2020-06-08",
-                value: 0,
-            },
-            //{id:13, measure:"International travels",date:"2020-06-08",value:0},
-
-            //{id:14, measure:"Essential groceries",date:"2020-07-06",value:100},
-            { id: 15, measure: "Workplaces", date: "2020-07-06", value: 100 },
-            //{id:16, measure:"School & Universities",date:"2020-07-06",value:100},
-            {
-                id: 17,
-                measure: "Parks & outdoor activities",
-                date: "2020-07-06",
-                value: 100,
-            },
-            {
-                id: 18,
-                measure: "Public transport",
-                date: "2020-07-06",
-                value: 100,
-            },
-            {
-                id: 19,
-                measure: "Retail & Recreation",
-                date: "2020-07-06",
-                value: 100,
-            },
-            //{id:20, measure:"International travels",date:"2020-07-06",value:100},
-
-            //{id:21, measure:"Essential groceries",date:"2020-08-03",value:20},
-            { id: 22, measure: "Workplaces", date: "2020-08-03", value: 20 },
-            //{id:23, measure:"School & Universities",date:"2020-08-03",value:0},
-            {
-                id: 24,
-                measure: "Parks & outdoor activities",
-                date: "2020-08-03",
-                value: 0,
-            },
-            {
-                id: 25,
-                measure: "Public transport",
-                date: "2020-08-03",
-                value: 0,
-            },
-            {
-                id: 26,
-                measure: "Retail & Recreation",
-                date: "2020-08-03",
-                value: 0,
-            },
-            //{id:27, measure:"International travels",date:"2020-08-03",value:0},
-
-            //{id:28, measure:"Essential groceries",date:"2020-09-07",value:100},
-            { id: 29, measure: "Workplaces", date: "2020-09-07", value: 100 },
-            //{id:30, measure:"School & Universities",date:"2020-09-07",value:100},
-            {
-                id: 31,
-                measure: "Parks & outdoor activities",
-                date: "2020-09-07",
-                value: 100,
-            },
-            {
-                id: 32,
-                measure: "Public transport",
-                date: "2020-09-07",
-                value: 100,
-            },
-            {
-                id: 33,
-                measure: "Retail & Recreation",
-                date: "2020-09-07",
-                value: 100,
-            },
-            //{id:34, measure:"International travels",date:"2020-09-07",value:100}
-        ],
-    },
-]
 
 const styles = () => ({
     left: {
@@ -217,117 +52,9 @@ const HeaderAuthors = styled.h3`
 `
 
 const { DropDownEditor } = Editors
-const measureTypes = [
-    //{ id: "S1_School closing", value: "School & Universities" },
-    //{ id: "S7_International travel controls", value: "International travels" },
-    { id: "parks", value: "Parks & outdoor activities" },
-    //{ id: "grocery/pharmacy", value: "Essential groceries" },
-    { id: "transit_stations", value: "Public transport" },
-    { id: "retail/recreation", value: "Retail & Recreation" },
-    { id: "workplace", value: "Workplaces" },
-]
 
 const measureTypeEditor = <DropDownEditor options={measureTypes} />
 
-const countries = [
-    "Afghanistan",
-    "Angola",
-    "Argentina",
-    "Austria",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bolivia",
-    "Botswana",
-    "Brazil",
-    "Bulgaria",
-    "Burkina Faso",
-    "Cameroon",
-    "Chile",
-    "Colombia",
-    "Costa Rica",
-    "Croatia",
-    "Denmark",
-    "Dominican Republic",
-    "Ecuador",
-    "El Salvador",
-    "Estonia",
-    "Finland",
-    "France",
-    "Gabon",
-    "Georgia",
-    "Germany",
-    "Ghana",
-    "Greece",
-    "Guatemala",
-    "Honduras",
-    "Hungary",
-    "India",
-    "Indonesia",
-    "Iraq",
-    "Ireland",
-    "Israel",
-    "Italy",
-    "Jamaica",
-    "Japan",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kuwait",
-    "Lebanon",
-    "Libya",
-    "Luxembourg",
-    "Malaysia",
-    "Mali",
-    "Mauritius",
-    "Mexico",
-    "Moldova",
-    "Mongolia",
-    "Mozambique",
-    "Namibia",
-    "Nepal",
-    "Netherlands",
-    "New Zealand",
-    "Nicaragua",
-    "Niger",
-    "Nigeria",
-    "Norway",
-    "Oman",
-    "Pakistan",
-    "Panama",
-    "Papua New Guinea",
-    "Paraguay",
-    "Peru",
-    "Philippines",
-    "Poland",
-    "Portugal",
-    "Qatar",
-    "Romania",
-    "Rwanda",
-    "Saudi Arabia",
-    "Senegal",
-    "Serbia",
-    "Singapore",
-    "Slovenia",
-    "South Africa",
-    "Spain",
-    "Sri Lanka",
-    "Sweden",
-    "Switzerland",
-    "Tanzania",
-    "Thailand",
-    "Turkey",
-    "Uganda",
-    "United Arab Emirates",
-    "United Kingdom",
-    "Uruguay",
-    "Vietnam",
-    "Zambia",
-    "Zimbabwe",
-]
 const columns = [
     {
         key: "measure",
@@ -367,7 +94,7 @@ class Covid19Form extends React.Component {
             data_json_2: "",
             loading_1: false,
             loading_2: false,
-            menuAnchorEl: null,
+            menuAnchorEl_1: null,
             menuAnchorEl_2: null,
             inputTutorial: false,
             scenarios: scenarios,
@@ -443,26 +170,47 @@ class Covid19Form extends React.Component {
     handleLoadMenuOpen = event => {
         this.data_to_load()
         const id = event.currentTarget.id
-        console.log(id)
-        this.setState(() => ({ menuAnchorEl: document.getElementById(id) }))
+        id === "covid-load-measure-1"
+            ? this.setState(() => ({
+                  menuAnchorEl_1: document.getElementById(id),
+              }))
+            : this.setState(() => ({
+                  menuAnchorEl_1: document.getElementById(id),
+              }))
     }
 
-    handleMenuClose = () => {
-        this.setState(() => ({ menuAnchorEl: null }))
+    handleMenuClose_1 = () => {
+        this.setState(() => ({ menuAnchorEl_1: null }))
     }
 
-    isLoadMenuOpen = () => {
-        return this.state.menuAnchorEl != null
+    handleMenuClose_2 = () => {
+        this.setState(() => ({ menuAnchorEl_2: null }))
     }
 
-    handleScenarioClick = event => {
+    isLoadMenuOpen = num => {
+        return num === 1
+            ? this.state.menuAnchorEl_1 != null
+            : this.state.menuAnchorEl_2 != null
+    }
+
+    handleScenarioClick_1 = event => {
         const scenario = this.state.scenarios.filter(
             (v, i) => v.id === event.currentTarget.id
         )
         this.setState(() => ({
             rows_1: scenario[0].mitigations,
         }))
-        this.handleMenuClose()
+        this.handleMenuClose_1()
+    }
+
+    handleScenarioClick_2 = event => {
+        const scenario = this.state.scenarios.filter(
+            (v, i) => v.id === event.currentTarget.id
+        )
+        this.setState(() => ({
+            rows_2: scenario[0].mitigations,
+        }))
+        this.handleMenuClose_2()
     }
 
     onGridRowsUpdated_1 = ({ fromRow, toRow, updated }) => {
@@ -536,12 +284,12 @@ class Covid19Form extends React.Component {
     }
 
     handleSubmit_1 = () => {
-        var selectedLines = this.state.rows_1.filter(
+        const selectedLines = this.state.rows_1.filter(
             value => this.state.selectedIndexes_1.indexOf(value.id) !== -1
         )
-        var measures = selectedLines.map(e => e.measure)
-        var dates = selectedLines.map(e => new Date().toISOString())
-        var values = selectedLines.map(e => e.value)
+        const measures = selectedLines.map(e => e.measure)
+        const dates = selectedLines.map(e => new Date().toISOString())
+        const values = selectedLines.map(e => e.value)
 
         this.setState({
             reproduction_path: "",
@@ -558,8 +306,8 @@ class Covid19Form extends React.Component {
             dates: dates,
             values: values,
         }).then(res => {
-            var df = res.data.df
-            var max_herd = Math.ceil(
+            let df = res.data.df
+            const max_herd = Math.ceil(
                 Math.max.apply(
                     Math,
                     df.map(function(o) {
@@ -579,12 +327,12 @@ class Covid19Form extends React.Component {
     }
 
     handleSubmit_2 = () => {
-        var selectedLines = this.state.rows_2.filter(
+        const selectedLines = this.state.rows_2.filter(
             value => this.state.selectedIndexes_2.indexOf(value.id) !== -1
         )
-        var measures = selectedLines.map(e => e.measure)
-        var dates = selectedLines.map(e => new Date().toISOString())
-        var values = selectedLines.map(e => e.value)
+        const measures = selectedLines.map(e => e.measure)
+        const dates = selectedLines.map(e => new Date().toISOString())
+        const values = selectedLines.map(e => e.value)
 
         this.setState({
             reproduction_path: "",
@@ -601,8 +349,8 @@ class Covid19Form extends React.Component {
             dates: dates,
             values: values,
         }).then(res => {
-            var df = res.data.df
-            var max_herd = Math.ceil(
+            let df = res.data.df
+            const max_herd = Math.ceil(
                 Math.max.apply(
                     Math,
                     df.map(function(o) {
@@ -622,23 +370,33 @@ class Covid19Form extends React.Component {
         })
     }
 
-    renderLoadMenu = () => {
+    renderLoadMenu = (num = 1) => {
         return (
             <Menu
-                anchorEl={this.state.menuAnchorEl}
+                anchorEl={
+                    num === 1
+                        ? this.state.menuAnchorEl_1
+                        : this.state.menuAnchorEl_2
+                }
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                id="load-menu"
+                id={num === 1 ? "load-menu-1" : "load-menu-2"}
                 keepMounted
                 variant={"selectedMenu"}
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
-                open={this.isLoadMenuOpen()}
-                onClose={this.handleMenuClose}
+                open={this.isLoadMenuOpen(num)}
+                onClose={
+                    num === 1 ? this.handleMenuClose_1 : this.handleMenuClose_2
+                }
             >
                 {this.state.scenarios.map((v, i) => (
                     <MenuItem
                         key={i}
                         id={v.id}
-                        onClick={this.handleScenarioClick}
+                        onClick={
+                            num === 1
+                                ? this.handleScenarioClick_1
+                                : this.handleScenarioClick_2
+                        }
                     >
                         <p>{v.id}</p>
                     </MenuItem>
@@ -647,9 +405,10 @@ class Covid19Form extends React.Component {
         )
     }
 
-    data_to_save = name => {
+    data_to_save = (name, num = 1) => {
         let { scenarios } = this.state
-        let data = this.state.rows_1.filter(
+        const rows = num === 1 ? this.state.rows_1 : this.state.rows_2
+        let data = rows.filter(
             value => this.state.selectedIndexes_1.indexOf(value.id) !== -1
         )
 
@@ -682,12 +441,16 @@ class Covid19Form extends React.Component {
     render_grid = (num = 1) => {
         const { classes } = this.props
         return (
-            <Grid id="covid-form" item xs={12}>
+            <Grid id={num === 1 ? "covid-form-1" : "covid-form-2"} item xs={12}>
                 <AppBar position="static">
                     <Toolbar variant="dense">
                         <div className={classes.left}>
                             <IconButton
-                                id="covid-add-measure"
+                                id={
+                                    num === 1
+                                        ? "covid-add-measure-1"
+                                        : "covid-add-measure-2"
+                                }
                                 edge="start"
                                 className={classes.menuButton}
                                 onClick={
@@ -701,7 +464,11 @@ class Covid19Form extends React.Component {
                                 <AddCircleRoundedIcon />
                             </IconButton>
                             <IconButton
-                                id="covid-remove-measure"
+                                id={
+                                    num === 1
+                                        ? "covid-remove-measure-1"
+                                        : "covid-remove-measure-2"
+                                }
                                 edge="start"
                                 className={classes.menuButton}
                                 onClick={
@@ -731,7 +498,11 @@ class Covid19Form extends React.Component {
                             </IconButton>
                         </div>
                         <IconButton
-                            id="covid-help-measure"
+                            id={
+                                num === 1
+                                    ? "covid-help-measure-1"
+                                    : "covid-help-measure-2"
+                            }
                             className={classes.menuButton}
                             onClick={this.handleHelpMeasure}
                             color="inherit"
@@ -740,7 +511,11 @@ class Covid19Form extends React.Component {
                             <HelpIcon />
                         </IconButton>
                         <IconButton
-                            id="covid-compute-measure"
+                            id={
+                                num === 1
+                                    ? "covid-compute-measure-1"
+                                    : "covid-compute-measure-2"
+                            }
                             className={classes.menuButton}
                             onClick={
                                 num === 1
@@ -754,7 +529,7 @@ class Covid19Form extends React.Component {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-                {this.renderLoadMenu()}
+                {this.renderLoadMenu(num)}
 
                 <FormControl
                     onSubmit={
@@ -814,11 +589,18 @@ class Covid19Form extends React.Component {
                             </MenuItem>
                         ))}
                     </Select>
-                    <FormHelperText id="covid-country-selection">
+                    <FormHelperText
+                        id={
+                            num === 1
+                                ? "covid-country-selection-1"
+                                : "covid-country-selection-2"
+                        }
+                    >
                         Select a country to run your simulation in
                     </FormHelperText>
                 </FormControl>
                 <LoadSaveDialog
+                    num={num}
                     action={"save"}
                     data_to_save={this.data_to_save}
                 />
@@ -854,6 +636,7 @@ class Covid19Form extends React.Component {
                         ? this.state.loading_1
                         : this.state.loading_2) && (
                         <Chart
+                            num={num}
                             data={
                                 num === 1
                                     ? this.state.data_json_1
@@ -894,7 +677,7 @@ class Covid19Form extends React.Component {
                             callback={this.callbackHelpMeasure}
                         />
                     </Grid>
-                    <Grid item xs={5}>
+                    <Grid item xs={12}>
                         {[1, 2].map((value, indice) => (
                             <ExpansionPanel
                                 key={indice}
@@ -908,14 +691,15 @@ class Covid19Form extends React.Component {
                                     Scenario {value}
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    {this.render_grid(value)}
+                                    <Grid item xs={5}>
+                                        {this.render_grid(value)}
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        {this.render_graph(value)}
+                                    </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
                         ))}
-                    </Grid>
-                    <Grid item xs={4}>
-                        {this.render_graph(1)}
-                        {this.render_graph(2)}
                     </Grid>
                 </Grid>
             </div>
