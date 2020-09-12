@@ -1,44 +1,43 @@
 import React from "react"
+
 import PropTypes from "prop-types"
 import styled from "@emotion/styled"
 
 import ReactDataGrid from "react-data-grid"
 import { Editors } from "react-data-grid-addons"
-//import GridDatePicker from "./griddatepicker"
-import GridRangeValues from "./gridrangevalue"
-
-import API from "./api"
-import Chart from "./chart"
-
-import Grid from "@material-ui/core/Grid"
-import { withStyles } from "@material-ui/core/styles"
 import Loader from "react-loader-spinner"
-import MenuItem from "@material-ui/core/MenuItem"
-import FormControl from "@material-ui/core/FormControl"
-import FormHelperText from "@material-ui/core/FormHelperText"
-import Select from "@material-ui/core/Select"
-
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import IconButton from "@material-ui/core/IconButton"
-import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded"
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle"
-import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite"
-import CloudDownloadRoundedIcon from "@material-ui/icons/CloudDownloadRounded"
-import HelpIcon from "@material-ui/icons/Help"
-import Menu from "@material-ui/core/Menu"
-import InputTutorial from "./inputTutorial"
-
-import LoadSaveDialog from "./load_save_scenarios"
-import { countries, scenarios, measureTypes } from "./constants"
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
 import {
+    AddCircleRounded,
+    RemoveCircle,
+    PlayCircleFilledWhite,
+    CloudDownloadRounded,
+    Help,
+    ExpandMore,
+} from "@material-ui/icons"
+import {
+    Grid,
+    withStyles,
+    MenuItem,
+    FormControl,
+    FormHelperText,
+    Select,
+    Toolbar,
+    AppBar,
+    IconButton,
+    Menu,
     ExpansionPanel,
     ExpansionPanelDetails,
     ExpansionPanelSummary,
 } from "@material-ui/core"
+
+//import GridDatePicker from "./griddatepicker"
+import InputTutorial from "./inputTutorial"
+import LoadSaveDialog from "./load_save_scenarios"
+import { countries, scenarios, measureTypes } from "./constants"
+import GridRangeValues from "./gridrangevalue"
+import API from "./api"
+import Chart from "./chart"
 
 const styles = () => ({
     left: {
@@ -175,7 +174,7 @@ class Covid19Form extends React.Component {
                   menuAnchorEl_1: document.getElementById(id),
               }))
             : this.setState(() => ({
-                  menuAnchorEl_1: document.getElementById(id),
+                  menuAnchorEl_2: document.getElementById(id),
               }))
     }
 
@@ -408,8 +407,12 @@ class Covid19Form extends React.Component {
     data_to_save = (name, num = 1) => {
         let { scenarios } = this.state
         const rows = num === 1 ? this.state.rows_1 : this.state.rows_2
+        const selectedIndexes =
+            num === 1
+                ? this.state.selectedIndexes_1
+                : this.state.selectedIndexes_2
         let data = rows.filter(
-            value => this.state.selectedIndexes_1.indexOf(value.id) !== -1
+            value => selectedIndexes.indexOf(value.id) !== -1
         )
 
         name = name !== "" ? name : new Date().toISOString()
@@ -461,7 +464,7 @@ class Covid19Form extends React.Component {
                                 color="inherit"
                                 aria-label="add"
                             >
-                                <AddCircleRoundedIcon />
+                                <AddCircleRounded />
                             </IconButton>
                             <IconButton
                                 id={
@@ -479,7 +482,7 @@ class Covid19Form extends React.Component {
                                 color="inherit"
                                 aria-label="remove"
                             >
-                                <RemoveCircleIcon />
+                                <RemoveCircle />
                             </IconButton>
                             <IconButton
                                 id={
@@ -494,7 +497,7 @@ class Covid19Form extends React.Component {
                                 aria-label="load"
                                 aria-haspopup="true"
                             >
-                                <CloudDownloadRoundedIcon />
+                                <CloudDownloadRounded />
                             </IconButton>
                         </div>
                         <IconButton
@@ -508,7 +511,7 @@ class Covid19Form extends React.Component {
                             color="inherit"
                             aria-label="play"
                         >
-                            <HelpIcon />
+                            <Help />
                         </IconButton>
                         <IconButton
                             id={
@@ -525,7 +528,7 @@ class Covid19Form extends React.Component {
                             color="inherit"
                             aria-label="play"
                         >
-                            <PlayCircleFilledWhiteIcon />
+                            <PlayCircleFilledWhite />
                         </IconButton>
                     </Toolbar>
                 </AppBar>
@@ -571,7 +574,6 @@ class Covid19Form extends React.Component {
                                         : this.state.selectedIndexes_2,
                             },
                         }}
-                        enableCellSelect={true}
                     />
                     <Select
                         onChange={
@@ -681,10 +683,12 @@ class Covid19Form extends React.Component {
                         {[1, 2].map((value, indice) => (
                             <ExpansionPanel
                                 key={indice}
+                                color={"grey"}
+                                square={true}
                                 defaultExpanded={value === 1 ? true : false}
                             >
                                 <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
+                                    expandIcon={<ExpandMore />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
                                 >
