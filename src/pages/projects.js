@@ -38,7 +38,7 @@ const IndexPage = ({ data }) => {
         <h1>Projects</h1>
           <div key="0">
             <Link
-              to={"covid19"}
+              to={"/covid19"}
               css={css`
                 text-decoration: none;
                 color: inherit;
@@ -54,7 +54,7 @@ const IndexPage = ({ data }) => {
 
           <div key="1">
             <Link
-              to={"reborn"}
+              to={"/reborn"}
               css={css`
                 text-decoration: none;
                 color: inherit;
