@@ -51,6 +51,22 @@ const IndexPage = ({ data }) => {
               <p>Research project enabling simulations of various scenarios regarding lockdown exit strategies during COVID 19 crisis.</p>
             </Link>
           </div>
+
+          <div key="1">
+            <Link
+              to={"reborn"}
+              css={css`
+                text-decoration: none;
+                color: inherit;
+              `}
+            >
+              <MarkerHeader>COVID-19 Best Strategie Finder</MarkerHeader>
+              <div>
+                <ArticleDate>January, 2021</ArticleDate>
+              </div>
+              <p>Research project enabling the research of the best strategies.</p>
+            </Link>
+          </div>
         {/* {data.allMarkdownRemark.edges.map(({ node }) => (
           <div key={node.id}>
             <Link

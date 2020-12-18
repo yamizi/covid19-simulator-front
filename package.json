@@ -43,7 +43,10 @@
     "react-modal": "^3.11.2",
     "react-particles-js": "^2.7.0",
     "save": "^2.4.0",
-    "typeface-nunito": "0.0.72"
+    "typeface-nunito": "0.0.72",
+    "bootstrap": "^4.5.3",
+    "react-bootstrap": "^1.4.0",
+    "recharts": "^1.8.5"
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",

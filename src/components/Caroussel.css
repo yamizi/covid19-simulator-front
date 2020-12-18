@@ -1,0 +1,31 @@
+.zoom-bar{
+    display:flex;
+    width: 100%;
+    justify-content: center; 
+    text-align: center;
+}
+
+.zoom-title{
+    font-weight: bolder;
+    text-align: center;
+}
+
+.custom-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+
+    position: relative;
+}
+
+.graph-title{
+    text-align:center;
+}
+
+.button{
+    margin-left: 10px;
+}
+
+.cunstom-item{
+    padding:0px 10px;
+}
