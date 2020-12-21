@@ -2,6 +2,7 @@ import React from "react"
 
 import PropTypes from "prop-types"
 import styled from "@emotion/styled"
+import moment from "moment"
 
 import ReactDataGrid from "react-data-grid"
 import { Editors } from "react-data-grid-addons"
@@ -20,8 +21,8 @@ import {
     withStyles,
     MenuItem,
     FormControl,
-    FormHelperText,
-    Select,
+    // FormHelperText,
+    // Select,
     Toolbar,
     AppBar,
     IconButton,
@@ -31,11 +32,13 @@ import {
     ExpansionPanelSummary,
 } from "@material-ui/core"
 
-//import GridDatePicker from "./griddatepicker"
+import GridDatePicker from "./griddatepicker"
+import GridRangeValues from "./gridrangevalue"
+import GridCheckBox from "./gridcheckbox"
 import InputTutorial from "./inputTutorial"
 import LoadSaveDialog from "./load_save_scenarios"
-import { countries, scenarios, measureTypes } from "./constants"
-import GridRangeValues from "./gridrangevalue"
+import { /* countries, */ scenarios, measureTypes } from "./constants"
+
 import API from "./api"
 import Chart from "./chart"
 
@@ -59,15 +62,13 @@ const columns = [
         key: "measure",
         name: "Measure",
         editor: measureTypeEditor,
-        //resizable: true,
-        //editable: measureTypeEditor,
     },
+    { key: "date", name: "Date", editable: true, editor: <GridDatePicker /> },
     {
         key: "value",
         name: "Value",
-        editor: GridRangeValues,
+        editor: <GridCheckBox />,
         editable: true,
-        //resizable: true,
     },
 ]
 
@@ -77,7 +78,7 @@ class Covid19Form extends React.Component {
         //localStorage.clear()
         this.state = {
             countryName_1: "Luxembourg",
-            countryName_2: "Burkina Faso",
+            countryName_2: "Luxembourg",
             rows_1: [],
             rows_2: [],
             selectedIndexes_1: [],
@@ -97,6 +98,8 @@ class Covid19Form extends React.Component {
             menuAnchorEl_2: null,
             inputTutorial: false,
             scenarios: scenarios,
+            date_1: moment().format("YYYY-MM-DD"),
+            date_2: moment().format("YYYY-MM-DD"),
         }
         this.savedState = null
     }
@@ -116,8 +119,8 @@ class Covid19Form extends React.Component {
                 ...previousState.rows_1,
                 {
                     id: previousState.increment_1,
-                    measure: "Workplaces",
-                    date: new Date().toISOString(),
+                    measure: "Belgium border",
+                    date: this.state.date_1,
                     value: 100,
                 },
             ],
@@ -131,8 +134,8 @@ class Covid19Form extends React.Component {
                 ...previousState.rows_2,
                 {
                     id: previousState.increment_2,
-                    measure: "Workplaces",
-                    date: new Date().toISOString(),
+                    measure: "Belgium border",
+                    date: this.state.date_2,
                     value: 100,
                 },
             ],
@@ -214,21 +217,21 @@ class Covid19Form extends React.Component {
 
     onGridRowsUpdated_1 = ({ fromRow, toRow, updated }) => {
         this.setState(state => {
-            const rows = state.rows_1.slice()
+            const rows_1 = state.rows_1.slice()
             for (let i = fromRow; i <= toRow; i++) {
-                rows[i] = { ...rows[i], ...updated }
+                rows_1[i] = { ...rows_1[i], ...updated }
             }
-            return { rows_1: rows }
+            return { rows_1 }
         })
     }
 
     onGridRowsUpdated_2 = ({ fromRow, toRow, updated }) => {
         this.setState(state => {
-            const rows = state.rows_2.slice()
+            const rows_2 = state.rows_2.slice()
             for (let i = fromRow; i <= toRow; i++) {
-                rows[i] = { ...rows[i], ...updated }
+                rows_2[i] = { ...rows_2[i], ...updated }
             }
-            return { rows_2: rows }
+            return { rows_2 }
         })
     }
 
@@ -287,8 +290,10 @@ class Covid19Form extends React.Component {
             value => this.state.selectedIndexes_1.indexOf(value.id) !== -1
         )
         const measures = selectedLines.map(e => e.measure)
-        const dates = selectedLines.map(e => new Date().toISOString())
+        const dates = selectedLines.map(e => e.date)
         const values = selectedLines.map(e => e.value)
+
+        console.log(measures, dates, values)
 
         this.setState({
             reproduction_path: "",
@@ -299,7 +304,7 @@ class Covid19Form extends React.Component {
             loading_1: true,
         })
 
-        API.post(`predict`, {
+        /* API.post(`predict`, {
             country_name: this.state.countryName_1,
             measures: measures,
             dates: dates,
@@ -322,7 +327,7 @@ class Covid19Form extends React.Component {
                 loading_1: false,
             })
             //console.log(res.data.path, this.state)
-        })
+        }) */
     }
 
     handleSubmit_2 = () => {
@@ -330,7 +335,7 @@ class Covid19Form extends React.Component {
             value => this.state.selectedIndexes_2.indexOf(value.id) !== -1
         )
         const measures = selectedLines.map(e => e.measure)
-        const dates = selectedLines.map(e => new Date().toISOString())
+        const dates = selectedLines.map(e => e.date)
         const values = selectedLines.map(e => e.value)
 
         this.setState({
@@ -342,7 +347,7 @@ class Covid19Form extends React.Component {
             loading_2: true,
         })
 
-        API.post(`predict`, {
+        /* API.post(`predict`, {
             country_name: this.state.countryName_2,
             measures: measures,
             dates: dates,
@@ -366,7 +371,7 @@ class Covid19Form extends React.Component {
                 loading_2: false,
             })
             //console.log(res.data.path, this.state)
-        })
+        }) */
     }
 
     renderLoadMenu = (num = 1) => {
@@ -439,6 +444,129 @@ class Covid19Form extends React.Component {
         this.setState((prevState, props) => ({
             scenarios: data || prevState.scenarios,
         }))
+    }
+
+    row_renderer = ({ renderBaseRow, ...props }) => {
+        const two_values = [
+            "Belgium border",
+            "French border",
+            "German border",
+            "Parks",
+            "Travel allowed",
+            "Strict Respect of Government Measures",
+            "Public Gathering",
+        ]
+        const three_values = ["Economic Activity Restriction"]
+        const four_values = ["Schools"]
+        const five_values = ["Private Social Gathering"]
+        let row = {}
+
+        if (
+            two_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+            console.log("row value", value, props.row.value)
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        value={value}
+                        step={1}
+                        marks={[
+                            { value: 0, label: "Open" },
+                            { value: 100, label: "Close" },
+                        ]}
+                    />
+                ),
+            }
+        } else if (
+            three_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        value={value}
+                        step={2}
+                        marks={[
+                            { value: 0, label: "None" },
+                            { value: 50, label: "Full" },
+                            { value: 100, label: "Mixed" },
+                        ]}
+                    />
+                ),
+            }
+        } else if (
+            four_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        value={value}
+                        step={3}
+                        marks={[
+                            { value: 0, label: "Open" },
+                            { value: 33, label: "OWSD" },
+                            { value: 66, label: "PO" },
+                            { value: 100, label: "Close" },
+                        ]}
+                    />
+                ),
+            }
+        } else if (
+            five_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        value={value}
+                        step={4}
+                        marks={[
+                            { value: 0, label: "None" },
+                            { value: 25, label: "5P" },
+                            { value: 50, label: "10P" },
+                            { value: 75, label: "20P" },
+                            { value: 100, label: "No R" },
+                        ]}
+                    />
+                ),
+            }
+        }
+        props = { ...props, row }
+        return <div>{renderBaseRow(props)}</div>
     }
 
     render_grid = (num = 1) => {
@@ -541,6 +669,8 @@ class Covid19Form extends React.Component {
                     fullWidth={true}
                 >
                     <ReactDataGrid
+                        //rowRenderer={this.row_renderer}
+                        enableCellSelect={true}
                         columns={columns}
                         rowGetter={i =>
                             num === 1
@@ -575,31 +705,6 @@ class Covid19Form extends React.Component {
                             },
                         }}
                     />
-                    <Select
-                        onChange={
-                            num === 1 ? this.changeName_1 : this.changeName_2
-                        }
-                        value={
-                            num === 1
-                                ? this.state.countryName_1
-                                : this.state.countryName_2
-                        }
-                    >
-                        {countries.map((c, index) => (
-                            <MenuItem key={index} value={c}>
-                                {c}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    <FormHelperText
-                        id={
-                            num === 1
-                                ? "covid-country-selection-1"
-                                : "covid-country-selection-2"
-                        }
-                    >
-                        Select a country to run your simulation in
-                    </FormHelperText>
                 </FormControl>
                 <LoadSaveDialog
                     num={num}
@@ -695,10 +800,10 @@ class Covid19Form extends React.Component {
                                     Scenario {value}
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Grid item xs={5}>
+                                    <Grid item xs={6}>
                                         {this.render_grid(value)}
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={5}>
                                         {this.render_graph(value)}
                                     </Grid>
                                 </ExpansionPanelDetails>

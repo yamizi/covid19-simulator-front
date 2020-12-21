@@ -265,11 +265,14 @@ export const scenarios = [
 ]
 
 export const measureTypes = [
-    //{ id: "S1_School closing", value: "School & Universities" },
-    //{ id: "S7_International travel controls", value: "International travels" },
-    { id: "parks", value: "Parks & outdoor activities" },
-    //{ id: "grocery/pharmacy", value: "Essential groceries" },
-    { id: "transit_stations", value: "Public transport" },
-    { id: "retail/recreation", value: "Retail & Recreation" },
-    { id: "workplace", value: "Workplaces" },
+    { id: "b_be", value: "Belgium border" },
+    { id: "b_fr", value: "French border" },
+    { id: "b_de", value: "German border" },
+    { id: "schools", value: "Schools" },
+    { id: "public_gath", value: "Public Gathering" },
+    { id: "private_gath", value: "Private Social Gathering" },
+    { id: "park", value: "Parks" },
+    { id: "travel", value: "Travel allowed" },
+    { id: "activity_restr", value: "Economic Activity Restriction" },
+    { id: "resp_gov_measure", value: "Strict Respect of Government Measures" },
 ]

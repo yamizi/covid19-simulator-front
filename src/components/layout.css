@@ -46,7 +46,6 @@ a {
   font-style: normal;
   color: hsla(0, 0%, 0%, 0.8);
   -webkit-text-decoration-skip: objects;
-  
 }
 a:active,
 a:hover {
@@ -624,8 +623,4 @@ pre tt:after {
   html {
     font-size: 100%;
   }
-}
-
-NavLink{
-  background-color: burlywood;
 }

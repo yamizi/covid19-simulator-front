@@ -1,17 +1,16 @@
 import React, { Component } from "react"
 import ReactDOM from "react-dom"
 import Slider from "@material-ui/core/Slider"
-import Search from "@material-ui/icons/Search"
 
 class GridRangeValues extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            value: this.props.value,
+            value: this.props.value || 0,
         }
     }
 
-    getInputNode() {
+    getInputNode = () => {
         return ReactDOM.findDOMNode(this).getElementsByTagName("input")[0]
     }
 
@@ -29,9 +28,10 @@ class GridRangeValues extends Component {
         return `${value}`
     }
 
-    getValue() {
+    getValue = () => {
         let update = {}
         update[this.props.column.key] = this.state.value
+        console.log(update)
         return update
     }
 
@@ -42,7 +42,7 @@ class GridRangeValues extends Component {
         }
     }
 
-    disableContainerStyles() {
+    disableContainerStyles = () => {
         return {
             backgroundColor: "#A4A4A4",
             fontWeight: 600,
@@ -61,26 +61,24 @@ class GridRangeValues extends Component {
             >
                 <div
                     style={{
-                        width: "65%",
+                        width: "85%",
                     }}
                 >
                     <Slider
+                        //step={100 / this.props.step}
                         step={25}
                         min={0}
                         max={100}
                         style={{
-                            backgroundColor: "white",
+                            backgroundColor: "inherit",
                         }}
-                        aria-labelledby="discrete-slider"
-                        valueLabelDisplay="on"
-                        marks={true}
+                        aria-labelledby={"discrete-slider"}
+                        valueLabelDisplay={"on"}
+                        //marks={this.props.marks}
                         value={this.state.value}
                         onChange={this.onChange}
                         getAriaValueText={this.display_value}
                     />
-                </div>
-                <div>
-                    <Search color="primary" />
                 </div>
             </div>
         )
