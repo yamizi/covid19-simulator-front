@@ -20,8 +20,7 @@ const APIREQUEST = {
     "values": [["close", "close"]]
 }
 
-const APIURL = 'http://127.0.0.1:8080/predict';
-
+const APIURL = 'http://localhost:8080/predict';
 
 function Reborn() {
     return (

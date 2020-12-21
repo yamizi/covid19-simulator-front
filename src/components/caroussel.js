@@ -9,8 +9,9 @@ import extractData from '../script/dataManager'
 
 import { makeCorrectStringFromDate } from '../script/dataManager';
 
-import { Tab, Nav, ButtonGroup, ToggleButton, Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
 
 class Caroussel extends Component {
 
@@ -22,8 +23,8 @@ class Caroussel extends Component {
             checked: false,
             left: undefined,
             right: undefined,
-            brushLeft:undefined,
-            brushRight:undefined, 
+            brushLeft: undefined,
+            brushRight: undefined,
             loading: true
         }
 
@@ -115,33 +116,31 @@ class Caroussel extends Component {
 
         return (
             <div>
-                <Tab.Container id="left-tabs-example" defaultActiveKey="sanitaryIndices">
-                    <Nav fill justify variant='tabs'>
-                        <Nav.Item>
-                            <Nav.Link eventKey="sanitaryIndices" onClick={this.forceUpdate.bind(this)}>Sanitary Indices</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="economicalIndices" onClick={this.forceUpdate.bind(this)}>Economical indices</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item bsPrefix='custom-item' >
-                            <ButtonGroup toggle className="">
-                                <ToggleButton
-                                    type="checkbox"
-                                    variant="primary"
+
+                <Tabs onSelect={(selectedTab, lastTab) => { if (selectedTab === 2) return false; }}>
+                    <TabList>
+                        <Tab style={{marginBottom:'0px'}}>Sanitary Indices</Tab>
+                        <Tab style={{marginBottom:'0px'}}>Economical indices</Tab>
+                        <Tab style={{marginBottom:'0px', padding:0, float:"right"}}>
+                            <div className='checkbox-wrapper unChecked'>
+                                <label className='input-checkbox'>
+                                    <input type='checkbox'
                                     checked={checked}
                                     onChange={(e) => {
                                         this.updateState(e.target.checked)
-                                    }}
-                                >
-                                    {checked ? 'hide' : 'show'} confidence intervals
-                                </ToggleButton>
-                            </ButtonGroup>
-                            <Button className="button" onClick={this.resetStates.bind(this)}>Reset</Button>
-                        </Nav.Item>
-                    </Nav>
+                                    }}/>
+                                    <span> {checked ? 'Hide' : 'Show'} confidence intervals</span>
+                                </label>
+                            </div>
+                            <button
+                                className='button'
+                                onClick={this.resetStates.bind(this)}>
+                                Reset graphs
+                            </button>
+                        </Tab>
+                    </TabList>
 
-
-                    <div>
+                    <div className="zoom-wrapper">
                         <div className='zoom-title'>Graph Control</div>
                         <div className='zoom-bar'>
                             <LineChart width={800} height={30}
@@ -156,46 +155,43 @@ class Caroussel extends Component {
                         </div>
                     </div>
 
-                    <Tab.Content>
-                        <Tab.Pane eventKey="sanitaryIndices">
-                            <div className='custom-container'>
 
-                                <DoubleAxisGraph
-                                    className='cell'
-                                    feature={["SimulationCases_ALL", 'SimulationDeaths_ALL']}
-                                    data={this.formatedData}
-                                    axis={['left', 'right']} title='Total Cases and Deaths'
-                                    showConfidenceInterval={checked} domain={[left, right]} />
+                    <TabPanel>
+                        <div className='custom-container'>
 
-                                <Graph
-                                    className='cell'
-                                    feature="SimulationCritical_ALL" data={this.formatedData} title='Simulation critical'
-                                    showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
+                            <DoubleAxisGraph
+                                className='cell'
+                                feature={["SimulationCases_ALL", 'SimulationDeaths_ALL']}
+                                data={this.formatedData}
+                                axis={['left', 'right']} title='Total Cases and Deaths'
+                                showConfidenceInterval={checked} domain={[left, right]} />
 
-                                <Graph
-                                    className='cell'
-                                    feature="R_ALL" data={this.formatedData} title='Reproduction rate'
-                                    showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={false} />
+                            <Graph
+                                className='cell'
+                                feature="SimulationCritical_ALL" data={this.formatedData} title='Simulation critical'
+                                showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
 
-                            </div>
-                        </Tab.Pane>
+                            <Graph
+                                className='cell'
+                                feature="R_ALL" data={this.formatedData} title='Reproduction rate'
+                                showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={false} />
 
-                        <Tab.Pane eventKey="economicalIndices">
-                            <div className='custom-container'>
-                                <Graph feature="unemploy" data={this.formatedData} title='Unemploy'
-                                    showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
-                                <Graph feature="export" data={this.formatedData} title='Export'
-                                    showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
-                                <Graph feature="inflation" data={this.formatedData} title='Inflation'
-                                    showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
-                                <Graph feature="ipcn" data={this.formatedData} title='IPCN'
-                                    showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <div className='custom-container'>
+                            <Graph feature="unemploy" data={this.formatedData} title='Unemploy'
+                                showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
+                            <Graph feature="export" data={this.formatedData} title='Export'
+                                showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
+                            <Graph feature="inflation" data={this.formatedData} title='Inflation'
+                                showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
+                            <Graph feature="ipcn" data={this.formatedData} title='IPCN'
+                                showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
 
-                            </div>
-                        </Tab.Pane>
-                    </Tab.Content>
-
-                </Tab.Container>
+                        </div>
+                    </TabPanel>
+                </Tabs>
 
             </div>
         );
