@@ -17,16 +17,17 @@ class Caroussel extends Component {
 
     constructor(props) {
         super(props);
-        this.data = this.makeAsyncRequest(props.apiUrl, props.apiRequest);
+        this.makeAsyncRequest(props.apiUrl, props.apiRequest);
+        this.data = props.data;
+        this.formatedData = extractData(this.data);
 
         this.state = {
-            checked: false,
-            left: undefined,
-            right: undefined,
-            brushLeft: undefined,
-            brushRight: undefined,
-            loading: true
-        }
+            left: this.formatedData[0]['Date'],
+            right: this.formatedData[this.formatedData.length - 1]['Date'],
+            brushLeft: 0,
+            brushRight: this.formatedData.length - 1,
+            loading: false,
+        };
 
     }
 
