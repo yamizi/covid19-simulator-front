@@ -5,8 +5,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Disclaimer from "../components/disclaimer"
 
-import Carroussel from "../components/caroussel"
-import RebornInputComponent from '../components/RebornInput'
+import LoadableReborn from '../components/lodableReborn'
 
 const Content = styled.div`
   margin: 0 auto;
@@ -22,7 +21,7 @@ function Reborn() {
             <Disclaimer />
             <Content>
                 <h1>COVID-19 Adaptive Exit Strategies Finder</h1>
-                <RebornInputComponent/>
+                <LoadableReborn/>
             </Content>
         </Layout>
     )
