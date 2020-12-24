@@ -273,3 +273,56 @@ export const measureTypes = [
     { id: "retail/recreation", value: "Retail & Recreation" },
     { id: "workplace", value: "Workplaces" },
 ]
+
+export const RebornMeasureTypes = [
+    { id: "b_be", value: "Belgium border" },
+    { id: "b_fr", value: "French border" },
+    { id: "b_de", value: "German border" },
+    { id: "schools", value: "Schools" },
+    { id: "public_gath", value: "Public Gathering" },
+    { id: "private_gath", value: "Private Social Gathering" },
+    { id: "park", value: "Parks" },
+    { id: "travel", value: "Travel allowed" },
+    { id: "activity_restr", value: "Economic Activity Restriction" },
+    { id: "resp_gov_measure", value: "Strict Respect of Government Measures" },
+]
+
+export const rebornMeasureToApiMeasures = {
+    "Belgium border": "b_be",
+    "French border": "b_fr",
+    "German border": "b_de",
+    "Schools": "schools_m",
+    "Public Gathering": "public_gath",
+    "Private Social Gathering": "private_gath",
+    "Parks": "park_m",
+    "Travel allowed": "travel_m",
+    "Economic Activity Restriction": "activity_restr",
+    "Strict Respect of Government Measures": "resp_gov_measure"
+}
+
+// TODO Savoir ce qu'est `scocial` dist pour la page web.
+export const marksToApiValue = {
+    "schools_m": {
+        'open': "open",
+        'owsd': "partial",
+        'po': "preventive_measure",
+        'close': "close"
+    },
+    "public_gath": { 'open': "yes", 'close': "no" },
+    "private_gath": {
+        'none': 1000,
+        '5p': 5,
+        '10p': 10,
+        '20p': 20,
+        'no r': 0
+    },
+    "social_dist": ["yes", "no"],
+    "resp_gov_measure": { 'open': "yes", 'close': "no" },
+    "parks_m": { 'open': "yes", 'close': "no" },
+    "travel_m": { 'open': "yes", 'close': "no" },
+    "activity_restr": {
+        'none': "open",
+        'full': "close",
+        'mixed': "mixed"
+    }
+}

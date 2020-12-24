@@ -2,11 +2,12 @@ import React from "react"
 
 import PropTypes from "prop-types"
 import styled from "@emotion/styled"
+import moment from "moment"
 
 import ReactDataGrid from "react-data-grid"
 import { Editors } from "react-data-grid-addons"
 import Loader from "react-loader-spinner"
-import Carroussel from "./caroussel"
+import Caroussel from './carrousel'
 
 import {
     AddCircleRounded,
@@ -21,8 +22,8 @@ import {
     withStyles,
     MenuItem,
     FormControl,
-    FormHelperText,
-    Select,
+    // FormHelperText,
+    // Select,
     Toolbar,
     AppBar,
     IconButton,
@@ -32,11 +33,13 @@ import {
     ExpansionPanelSummary,
 } from "@material-ui/core"
 
-//import GridDatePicker from "./griddatepicker"
+import GridDatePicker from "./griddatepicker"
+import GridRangeValues from "./gridrangevalue"
+import GridCheckBox from "./gridcheckbox"
 import InputTutorial from "./inputTutorial"
 import LoadSaveDialog from "./load_save_scenarios"
-import { countries, scenarios, measureTypes } from "./constants"
-import GridRangeValues from "./gridrangevalue"
+import { /* countries, */ scenarios, RebornMeasureTypes, rebornMeasureToApiMeasures, marksToApiValue } from "./constants"
+
 import API from "./api"
 import Chart from "./chart"
 
@@ -53,32 +56,30 @@ const HeaderAuthors = styled.h3`
 
 const { DropDownEditor } = Editors
 
-const measureTypeEditor = <DropDownEditor options={measureTypes} />
+const measureTypeEditor = <DropDownEditor options={RebornMeasureTypes} />
 
 const columns = [
     {
         key: "measure",
         name: "Measure",
         editor: measureTypeEditor,
-        //resizable: true,
-        //editable: measureTypeEditor,
     },
+    { key: "date", name: "Date", editable: true, editor: <GridDatePicker /> },
     {
         key: "value",
         name: "Value",
-        editor: GridRangeValues,
+        editor: <GridRangeValues />,
         editable: true,
-        //resizable: true,
     },
 ]
 
-class RebornInput extends React.Component {
+class Covid19Form extends React.Component {
     constructor(props) {
         super(props)
         //localStorage.clear()
         this.state = {
             countryName_1: "Luxembourg",
-            countryName_2: "Burkina Faso",
+            countryName_2: "Luxembourg",
             rows_1: [],
             rows_2: [],
             selectedIndexes_1: [],
@@ -98,6 +99,8 @@ class RebornInput extends React.Component {
             menuAnchorEl_2: null,
             inputTutorial: false,
             scenarios: scenarios,
+            date_1: moment().format("YYYY-MM-DD"),
+            date_2: moment().format("YYYY-MM-DD"),
         }
         this.savedState = null
     }
@@ -117,9 +120,10 @@ class RebornInput extends React.Component {
                 ...previousState.rows_1,
                 {
                     id: previousState.increment_1,
-                    measure: "Workplaces",
-                    date: new Date().toISOString(),
+                    measure: "Belgium border",
+                    date: this.state.date_1,
                     value: 100,
+                    label: 'Close'
                 },
             ],
             increment_1: previousState.increment_1 + 1,
@@ -132,9 +136,10 @@ class RebornInput extends React.Component {
                 ...previousState.rows_2,
                 {
                     id: previousState.increment_2,
-                    measure: "Workplaces",
-                    date: new Date().toISOString(),
+                    measure: "Belgium border",
+                    date: this.state.date_2,
                     value: 100,
+                    label: 'Close'
                 },
             ],
             increment_2: previousState.increment_2 + 1,
@@ -179,6 +184,20 @@ class RebornInput extends React.Component {
             }))
     }
 
+    onSliderValueChange = (id, newValue, newLabel) => {
+        const findId = (element) => element.id == id;
+
+        var state = this.state.rows_1;
+        let index = state.findIndex(findId);
+
+        state[index].value = newValue;
+        state[index].label = newLabel
+
+        this.setState({
+            rows_1: state
+        });
+    }
+
     handleMenuClose_1 = () => {
         this.setState(() => ({ menuAnchorEl_1: null }))
     }
@@ -215,25 +234,26 @@ class RebornInput extends React.Component {
 
     onGridRowsUpdated_1 = ({ fromRow, toRow, updated }) => {
         this.setState(state => {
-            const rows = state.rows_1.slice()
+            const rows_1 = state.rows_1.slice()
             for (let i = fromRow; i <= toRow; i++) {
-                rows[i] = { ...rows[i], ...updated }
+                rows_1[i] = { ...rows_1[i], ...updated }
             }
-            return { rows_1: rows }
+            return { rows_1 }
         })
     }
 
     onGridRowsUpdated_2 = ({ fromRow, toRow, updated }) => {
         this.setState(state => {
-            const rows = state.rows_2.slice()
+            const rows_2 = state.rows_2.slice()
             for (let i = fromRow; i <= toRow; i++) {
-                rows[i] = { ...rows[i], ...updated }
+                rows_2[i] = { ...rows_2[i], ...updated }
             }
-            return { rows_2: rows }
+            return { rows_2 }
         })
     }
 
     onRowsSelected_1 = rows => {
+
         var selectedIdx = rows.map(r => r.rowIdx)
         this.setState({
             selectedIndexes_1: this.state.selectedIndexes_1.concat(selectedIdx),
@@ -265,14 +285,6 @@ class RebornInput extends React.Component {
         })
     }
 
-    changeName_1 = event => {
-        this.setState({ countryName_1: event.target.value })
-    }
-
-    changeName_2 = event => {
-        this.setState({ countryName_2: event.target.value })
-    }
-
     handleHelpMeasure = () => {
         this.savedState = this.state
         this.setState({ inputTutorial: true })
@@ -284,32 +296,51 @@ class RebornInput extends React.Component {
     }
 
     handleSubmit_1 = () => {
-        // const APIREQUEST = {
-        //     "dates": ["2020-08-15", "2020-08-30"],
-        //     "measures": [["b_be", "b_fr"]],
-        //     "values": [["close", "close"]]
-        // }
-
         const selectedLines = this.state.rows_1.filter(
             value => this.state.selectedIndexes_1.indexOf(value.id) !== -1
         )
-        const measures = selectedLines.map(e => e.measure)
-        const dates = selectedLines.map(e => new Date().toISOString())
-        const values = selectedLines.map(e => e.value)
+
+        var measures = selectedLines.map(e => rebornMeasureToApiMeasures[e.measure]);
+        const dates = selectedLines.map(e => e.date);
+        var values = selectedLines.map(e => e.label);
+        values = values.map((v) => v.toLowerCase());
+
+        console.log(measures);
+        console.log(dates);
+        console.log(values);
+
+        for(let i=0; i<measures.length; i++){
+            var tmp_measure = measures[i];
+
+            if(tmp_measure in marksToApiValue){
+                let tmp_value = marksToApiValue[tmp_measure][values[i]];
+                console.log(marksToApiValue[tmp_measure]);
+                console.log(values[i])
+                values[i] = tmp_value;
+            }
+        } 
+
+        console.log('GLOGLOGLO')
+        console.log(measures);
+        console.log(dates);
+        console.log(values);
+
+
 
         this.setState({
             reproduction_path: "",
             case_path: "",
-            hospital_path: "",  
+            hospital_path: "",
             critical_path: "",
             death_path: "",
             loading_1: true,
         })
 
         API.post(`predict_reborn`, {
-            measures: measures,
+            country_name: this.state.countryName_1,
+            measures: [measures],
             dates: dates,
-            values: values,
+            values: [values],
         }).then(res => {
             let df = res.data.df
             const max_herd = Math.ceil(
@@ -327,8 +358,9 @@ class RebornInput extends React.Component {
                 data_json_1: df,
                 loading_1: false,
             })
-            
+            console.log(res.data.path, this.state)
         })
+
     }
 
     handleSubmit_2 = () => {
@@ -336,7 +368,7 @@ class RebornInput extends React.Component {
             value => this.state.selectedIndexes_2.indexOf(value.id) !== -1
         )
         const measures = selectedLines.map(e => e.measure)
-        const dates = selectedLines.map(e => new Date().toISOString())
+        const dates = selectedLines.map(e => e.date)
         const values = selectedLines.map(e => e.value)
 
         this.setState({
@@ -348,7 +380,7 @@ class RebornInput extends React.Component {
             loading_2: true,
         })
 
-        API.post(`predict`, {
+        /* API.post(`predict`, {
             country_name: this.state.countryName_2,
             measures: measures,
             dates: dates,
@@ -358,7 +390,7 @@ class RebornInput extends React.Component {
             const max_herd = Math.ceil(
                 Math.max.apply(
                     Math,
-                    df.map(function (o) {
+                    df.map(function(o) {
                         return o.Herd_immunity
                     })
                 )
@@ -372,7 +404,7 @@ class RebornInput extends React.Component {
                 loading_2: false,
             })
             //console.log(res.data.path, this.state)
-        })
+        }) */
     }
 
     renderLoadMenu = (num = 1) => {
@@ -445,6 +477,162 @@ class RebornInput extends React.Component {
         this.setState((prevState, props) => ({
             scenarios: data || prevState.scenarios,
         }))
+    }
+
+
+    updateLabel(rowId, newLabel){
+        var row1 = this.state.rows_1;
+        row1[rowId].label = newLabel;
+        this.state.rows_1 = row1;
+    }
+
+
+    row_renderer = ({ renderBaseRow, ...props }) => {
+
+        console.log(props)
+
+        const two_values = [
+            "Belgium border",
+            "French border",
+            "German border",
+            "Parks",
+            "Travel allowed",
+            "Strict Respect of Government Measures",
+            "Public Gathering",
+        ]
+        const three_values = ["Economic Activity Restriction"]
+        const four_values = ["Schools"]
+        const five_values = ["Private Social Gathering"]
+        let row = {}
+
+        if (
+            two_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        onValueChange={this.onSliderValueChange}
+                        id={props.row.id}
+                        value={value}
+                        step={0}
+                        marks={[
+                            { value: 0, label: "Open" },
+                            { value: 100, label: "Close" },
+                        ]}
+                    />
+                ),
+            }
+
+        } else if (
+            three_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+
+            console.log('TWO');
+
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        onValueChange={this.onSliderValueChange}
+                        id={props.row.id}
+                        value={value}
+                        step={0}
+                        marks={[
+                            { value: 0, label: "None" },
+                            { value: 50, label: "Full" },
+                            { value: 100, label: "Mixed" },
+                        ]}
+                    />
+                ),
+            }
+
+            this.updateLabel(props.row.id, 'Mixed');
+
+
+        } else if (
+            four_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+
+
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        onValueChange={this.onSliderValueChange}
+                        id={props.row.id}
+                        value={value}
+                        step={0}
+                        marks={[
+                            { value: 0, label: "Open" },
+                            { value: 33, label: "OWSD" },
+                            { value: 66, label: "PO" },
+                            { value: 100, label: "Close" },
+                        ]}
+                    />
+                ),
+            }
+        } else if (
+            five_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+
+            console.log('FIVE');
+
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        onValueChange={this.onSliderValueChange}
+                        id={props.row.id}
+                        value={value}
+                        step={0}
+                        marks={[
+                            { value: 0, label: "None" },
+                            { value: 25, label: "5P" },
+                            { value: 50, label: "10P" },
+                            { value: 75, label: "20P" },
+                            { value: 100, label: "No R" },
+                        ]}
+                    />
+                ),
+            }
+            this.updateLabel(props.row.id, 'No R');
+        }
+        props = { ...props, row }
+        return <div>{renderBaseRow(props)}</div>
     }
 
     render_grid = (num = 1) => {
@@ -547,22 +735,28 @@ class RebornInput extends React.Component {
                     fullWidth={true}
                 >
                     <ReactDataGrid
+                        rowRenderer={this.row_renderer}
+                        enableCellSelect={true}
                         columns={columns}
+
                         rowGetter={i =>
                             num === 1
                                 ? this.state.rows_1[i]
                                 : this.state.rows_2[i]
                         }
+
                         rowsCount={
                             num === 1
                                 ? this.state.rows_1.length
                                 : this.state.rows_2.length
                         }
+
                         onGridRowsUpdated={
                             num === 1
                                 ? this.onGridRowsUpdated_1
                                 : this.onGridRowsUpdated_2
                         }
+
                         rowSelection={{
                             showCheckbox: true,
                             onRowsSelected:
@@ -581,31 +775,6 @@ class RebornInput extends React.Component {
                             },
                         }}
                     />
-                    <Select
-                        onChange={
-                            num === 1 ? this.changeName_1 : this.changeName_2
-                        }
-                        value={
-                            num === 1
-                                ? this.state.countryName_1
-                                : this.state.countryName_2
-                        }
-                    >
-                        {countries.map((c, index) => (
-                            <MenuItem key={index} value={c}>
-                                {c}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    <FormHelperText
-                        id={
-                            num === 1
-                                ? "covid-country-selection-1"
-                                : "covid-country-selection-2"
-                        }
-                    >
-                        Select a country to run your simulation in
-                    </FormHelperText>
                 </FormControl>
                 <LoadSaveDialog
                     num={num}
@@ -617,7 +786,6 @@ class RebornInput extends React.Component {
     }
 
     render_graph = (num = 1) => {
-        
         return (
             <Grid item xs={12}>
                 {(num === 1 ? this.state.loading_1 : this.state.loading_2) && (
@@ -644,7 +812,8 @@ class RebornInput extends React.Component {
                     !(num === 1
                         ? this.state.loading_1
                         : this.state.loading_2) && (
-                        <Carroussel data={this.state.data_json_1}></Carroussel>
+                        <Caroussel data={this.state.data_json_1}
+                        />
                     )}
                 {this.state.reproduction_path !== "" && (
                     <img src={this.state.reproduction_path} alt="" />
@@ -679,14 +848,13 @@ class RebornInput extends React.Component {
                             callback={this.callbackHelpMeasure}
                         />
                     </Grid>
-                    <Grid container spacing={3} xs={12}>
-                        <Grid item xs={3}>
+                    <Grid container justify='center' item xs={12}>
+                        <Grid item xs={10}>
                             {this.render_grid(1)}
                         </Grid>
-                        <Grid item xs={9}>
-                            {this.render_graph(1)}
+                        <Grid item xs={12}>
+                            {this.render_graph(1)} 
                         </Grid>
-
                     </Grid>
                 </Grid>
             </div>
@@ -694,10 +862,10 @@ class RebornInput extends React.Component {
     }
 }
 
-RebornInput.propTypes = {
+Covid19Form.propTypes = {
     classes: PropTypes.object.isRequired,
 }
 
-const RebornInputComponent = withStyles(styles)(RebornInput)
+const Covid19Component = withStyles(styles)(Covid19Form)
 
-export default RebornInputComponent
+export default Covid19Component

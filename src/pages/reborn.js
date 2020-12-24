@@ -17,8 +17,8 @@ const Content = styled.div`
 function Reborn() {
     return (
         <Layout>
-            <SEO title="Covid19" />
-            <Disclaimer />
+            <SEO title="Reborn" />
+            {/* <Disclaimer /> */}
             <Content>
                 <h1>COVID-19 Adaptive Exit Strategies Finder</h1>
                 <LoadableReborn/>
