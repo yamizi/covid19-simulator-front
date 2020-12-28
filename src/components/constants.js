@@ -264,6 +264,55 @@ export const scenarios = [
     },
 ]
 
+
+
+export const rebornScenarios = [
+    {
+        id: "brutal-strategy",
+        mitigations: [
+            { id: 1, measure: "Belgium border", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 2, measure: "French border", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 3, measure: "German border", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 4, measure: "Schools", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 5, measure: "Public Gathering", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 6, measure: "Private Social Gathering", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 7, measure: "Parks", date: "2020-05-11", value: 100, label:'No R' },
+            { id: 8, measure: "Travel allowed", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 9, measure: "Economic Activity Restriction", date: "2020-05-11", value: 50, label:'Full' },
+            { id: 10, measure: "Strict Respect of Government Measures", date: "2020-05-11", value: 0, label:'Open' }
+        ],
+    },
+    {
+        id: "brutal-strategy-for-one-month",
+        mitigations: [
+            { id: 1, measure: "Belgium border", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 2, measure: "French border", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 3, measure: "German border", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 4, measure: "Schools", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 5, measure: "Public Gathering", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 6, measure: "Private Social Gathering", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 7, measure: "Parks", date: "2020-05-11", value: 100, label:'No R' },
+            { id: 8, measure: "Travel allowed", date: "2020-05-11", value: 100, label:'Close' },
+            { id: 9, measure: "Economic Activity Restriction", date: "2020-05-11", value: 50, label:'Full' },
+            { id: 10, measure: "Strict Respect of Government Measures", date: "2020-05-11", value: 0, label:'Open' },
+
+            { id: 1, measure: "Belgium border", date: "2020-06-11", value: 0, label:'Open' },
+            { id: 2, measure: "French border", date: "2020-06-11", value: 0, label:'Open' },
+            { id: 3, measure: "German border", date: "2020-06-11", value: 0, label:'Open' },
+            { id: 4, measure: "Schools", date: "2020-06-11", value: 0, label:'Open' },
+            { id: 5, measure: "Public Gathering", date: "2020-06-11", value: 0, label:'Open' },
+            { id: 6, measure: "Private Social Gathering", date: "2020-06-11", value: 0, label:'Open' },
+            { id: 7, measure: "Parks", date: "2020-06-11", value: 0, label:'None' },
+            { id: 8, measure: "Travel allowed", date: "2020-06-11", value: 0, label:'Open' },
+            { id: 9, measure: "Economic Activity Restriction", date: "2020-06-11", value: 0, label:'None' }
+        ],
+    }
+    
+
+]
+
+
+
 export const measureTypes = [
     //{ id: "S1_School closing", value: "School & Universities" },
     //{ id: "S7_International travel controls", value: "International travels" },
@@ -294,7 +343,7 @@ export const rebornMeasureToApiMeasures = {
     "Schools": "schools_m",
     "Public Gathering": "public_gath",
     "Private Social Gathering": "private_gath",
-    "Parks": "park_m",
+    "Parks": "parks_m",
     "Travel allowed": "travel_m",
     "Economic Activity Restriction": "activity_restr",
     "Strict Respect of Government Measures": "resp_gov_measure"

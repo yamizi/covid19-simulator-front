@@ -15,7 +15,6 @@ import {
     PlayCircleFilledWhite,
     CloudDownloadRounded,
     Help,
-    ExpandMore,
 } from "@material-ui/icons"
 import {
     Grid,
@@ -28,17 +27,13 @@ import {
     AppBar,
     IconButton,
     Menu,
-    ExpansionPanel,
-    ExpansionPanelDetails,
-    ExpansionPanelSummary,
 } from "@material-ui/core"
 
 import GridDatePicker from "./griddatepicker"
 import GridRangeValues from "./gridrangevalue"
-import GridCheckBox from "./gridcheckbox"
-import InputTutorial from "./inputTutorial"
+import RebornInputTutorial from "./rebornInputTutorial"
 import LoadSaveDialog from "./load_save_scenarios"
-import { /* countries, */ scenarios, RebornMeasureTypes, rebornMeasureToApiMeasures, marksToApiValue } from "./constants"
+import { /* countries, */ rebornScenarios, RebornMeasureTypes, rebornMeasureToApiMeasures, marksToApiValue } from "./constants"
 
 import API from "./api"
 import Chart from "./chart"
@@ -98,7 +93,7 @@ class Covid19Form extends React.Component {
             menuAnchorEl_1: null,
             menuAnchorEl_2: null,
             inputTutorial: false,
-            scenarios: scenarios,
+            scenarios: rebornScenarios,
             date_1: moment().format("YYYY-MM-DD"),
             date_2: moment().format("YYYY-MM-DD"),
         }
@@ -305,27 +300,14 @@ class Covid19Form extends React.Component {
         var values = selectedLines.map(e => e.label);
         values = values.map((v) => v.toLowerCase());
 
-        console.log(measures);
-        console.log(dates);
-        console.log(values);
-
         for(let i=0; i<measures.length; i++){
             var tmp_measure = measures[i];
 
             if(tmp_measure in marksToApiValue){
                 let tmp_value = marksToApiValue[tmp_measure][values[i]];
-                console.log(marksToApiValue[tmp_measure]);
-                console.log(values[i])
                 values[i] = tmp_value;
             }
         } 
-
-        console.log('GLOGLOGLO')
-        console.log(measures);
-        console.log(dates);
-        console.log(values);
-
-
 
         this.setState({
             reproduction_path: "",
@@ -489,8 +471,6 @@ class Covid19Form extends React.Component {
 
     row_renderer = ({ renderBaseRow, ...props }) => {
 
-        console.log(props)
-
         const two_values = [
             "Belgium border",
             "French border",
@@ -542,8 +522,6 @@ class Covid19Form extends React.Component {
                 typeof props.row.value === "number" && props.row.value !== null
                     ? props.row.value
                     : 0
-
-            console.log('TWO');
 
             row = {
                 id: props.row.id,
@@ -606,9 +584,6 @@ class Covid19Form extends React.Component {
                 typeof props.row.value === "number" && props.row.value !== null
                     ? props.row.value
                     : 0
-
-            console.log('FIVE');
-
             row = {
                 id: props.row.id,
                 measure: props.row.measure,
@@ -776,11 +751,6 @@ class Covid19Form extends React.Component {
                         }}
                     />
                 </FormControl>
-                <LoadSaveDialog
-                    num={num}
-                    action={"save"}
-                    data_to_save={this.data_to_save}
-                />
             </Grid>
         )
     }
@@ -843,7 +813,7 @@ class Covid19Form extends React.Component {
                             By Serval & Trux research groups @ SnT, University
                             of Luxembourg
                         </HeaderAuthors>
-                        <InputTutorial
+                        <RebornInputTutorial
                             run={this.state.inputTutorial}
                             callback={this.callbackHelpMeasure}
                         />
