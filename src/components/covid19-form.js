@@ -67,7 +67,7 @@ const columns = [
     {
         key: "value",
         name: "Value",
-        editor: <GridCheckBox />,
+        editor: <GridRangeValues />,
         editable: true,
     },
 ]
@@ -76,6 +76,8 @@ class Covid19Form extends React.Component {
     constructor(props) {
         super(props)
         //localStorage.clear()
+        this.global_date_1 = moment().format("YYYY-MM-DD")
+        this.global_date_2 = moment().format("YYYY-MM-DD")
         this.state = {
             countryName_1: "Luxembourg",
             countryName_2: "Luxembourg",
@@ -98,8 +100,8 @@ class Covid19Form extends React.Component {
             menuAnchorEl_2: null,
             inputTutorial: false,
             scenarios: scenarios,
-            date_1: moment().format("YYYY-MM-DD"),
-            date_2: moment().format("YYYY-MM-DD"),
+            date_1: this.global_date_1,
+            date_2: this.global_date_2,
         }
         this.savedState = null
     }
@@ -120,7 +122,7 @@ class Covid19Form extends React.Component {
                 {
                     id: previousState.increment_1,
                     measure: "Belgium border",
-                    date: this.state.date_1,
+                    date: this.global_date_1,
                     value: 100,
                 },
             ],
@@ -135,7 +137,7 @@ class Covid19Form extends React.Component {
                 {
                     id: previousState.increment_2,
                     measure: "Belgium border",
-                    date: this.state.date_2,
+                    date: this.global_date_2,
                     value: 100,
                 },
             ],
@@ -221,7 +223,13 @@ class Covid19Form extends React.Component {
             for (let i = fromRow; i <= toRow; i++) {
                 rows_1[i] = { ...rows_1[i], ...updated }
             }
-            return { rows_1 }
+            let r = rows_1
+            if (updated.date !== undefined) {
+                this.global_date_1 = updated.date
+                r = rows_1.map(row => ({ ...row, ...updated }))
+            }
+
+            return { rows_1: r }
         })
     }
 
@@ -231,7 +239,13 @@ class Covid19Form extends React.Component {
             for (let i = fromRow; i <= toRow; i++) {
                 rows_2[i] = { ...rows_2[i], ...updated }
             }
-            return { rows_2 }
+            let r = rows_2
+            if (updated.date !== undefined) {
+                this.global_date_2 = updated.date
+                r = rows_2.map(row => ({ ...row, ...updated }))
+            }
+
+            return { rows_2: r }
         })
     }
 

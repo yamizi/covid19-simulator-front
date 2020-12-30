@@ -31,7 +31,6 @@ class GridRangeValues extends Component {
     getValue = () => {
         let update = {}
         update[this.props.column.key] = this.state.value
-        console.log(update)
         return update
     }
 
