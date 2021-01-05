@@ -96,7 +96,7 @@ class Covid19Form extends React.Component {
             menuAnchorEl_1: null,
             menuAnchorEl_2: null,
             inputTutorial: false,
-            scenarios: scenarios,
+            scenarios: rebornScenarios,
             date_1: this.global_date_1,
             date_2: this.global_date_2,
         }
