@@ -25,9 +25,6 @@ class Caroussel extends Component {
             brushLeft: 0,
             brushRight: this.formatedData.length - 1,
         };
-
-
-
     }
 
     resetStates() {
@@ -72,7 +69,7 @@ class Caroussel extends Component {
         const { checked, left, right, brushLeft, brushRight } = this.state;
 
         return (
-            <div style={{ minHeight: '85vh' }}>
+            <div style={{marginTop:'20px', minHeight: '85vh' }}>
 
                 <Tabs onSelect={(selectedTab, lastTab) => { if (selectedTab === 2) return false; }}>
                     <TabList>

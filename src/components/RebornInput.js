@@ -34,7 +34,7 @@ import GridDatePicker from "./griddatepicker"
 import GridRangeValues from "./gridrangevalue"
 import RebornInputTutorial from "./rebornInputTutorial"
 import LoadSaveDialog from "./load_save_scenarios"
-import { /* countries, */ rebornScenarios, RebornMeasureTypes, rebornMeasureToApiMeasures, marksToApiValue } from "./constants"
+import { defaultRebornMeasureTypes, rebornScenarios, RebornMeasureTypes, rebornMeasureToApiMeasures, marksToApiValue } from "./constants"
 
 import API from "./api"
 import Chart from "./chart"
@@ -78,7 +78,7 @@ class Covid19Form extends React.Component {
         this.state = {
             countryName_1: "Luxembourg",
             countryName_2: "Luxembourg",
-            rows_1: [],
+            rows_1: defaultRebornMeasureTypes,
             rows_2: [],
             selectedIndexes_1: [],
             selectedIndexes_2: [],
@@ -214,10 +214,14 @@ class Covid19Form extends React.Component {
         const scenario = this.state.scenarios.filter(
             (v, i) => v.id === event.currentTarget.id
         )
+
         this.setState(() => ({
             rows_1: scenario[0].mitigations,
         }))
+
         this.handleMenuClose_1()
+
+
     }
 
     handleScenarioClick_2 = event => {
@@ -314,6 +318,9 @@ class Covid19Form extends React.Component {
         var values = selectedLines.map(e => e.label);
         values = values.map((v) => v.toLowerCase());
 
+        console.log(values);
+        console.log(this.state.rows_1);
+
         for(let i=0; i<measures.length; i++){
             var tmp_measure = measures[i];
 
@@ -331,6 +338,10 @@ class Covid19Form extends React.Component {
             death_path: "",
             loading_1: true,
         })
+
+        console.log(measures);
+        console.log(dates);
+        console.log(values);
 
         API.post(`predict_reborn`, {
             country_name: this.state.countryName_1,
@@ -490,10 +501,14 @@ class Covid19Form extends React.Component {
             "French border",
             "German border",
             "Parks",
-            "Travel allowed",
-            "Strict Respect of Government Measures",
-            "Public Gathering",
         ]
+
+        const yes_no_values = [
+            "Travel allowed",
+            "Public Gathering",
+            "Strict Respect of Government Measures"
+        ]
+
         const three_values = ["Economic Activity Restriction"]
         const four_values = ["Schools"]
         const five_values = ["Private Social Gathering"]
@@ -527,6 +542,34 @@ class Covid19Form extends React.Component {
                 ),
             }
 
+        }else if (
+            yes_no_values.some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            const value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                date: props.row.date,
+                value: (
+                    <GridRangeValues
+                        onValueChange={this.onSliderValueChange}
+                        id={props.row.id}
+                        value={value}
+                        step={0}
+                        marks={[
+                            { value: 0, label: "Yes" },
+                            { value: 100, label: "No" },
+                        ]}
+                    />
+                ),
+            }
+
         } else if (
             three_values.some(
                 v => v.toLowerCase() === props.row.measure.toLowerCase()
@@ -555,8 +598,8 @@ class Covid19Form extends React.Component {
                     />
                 ),
             }
-
-            this.updateLabel(props.row.id, 'Mixed');
+            
+            this.updateLabel(props.row.id, props.row.label);
 
 
         } else if (
@@ -618,7 +661,7 @@ class Covid19Form extends React.Component {
                     />
                 ),
             }
-            this.updateLabel(props.row.id, 'No R');
+            this.updateLabel(props.row.id, props.row.label);
         }
         props = { ...props, row }
         return <div>{renderBaseRow(props)}</div>
@@ -819,6 +862,7 @@ class Covid19Form extends React.Component {
     }
 
     render() {
+        // console.log(this.state.rows_1);
         return (
             <div>
                 <Grid container spacing={3}>

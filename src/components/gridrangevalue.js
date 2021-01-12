@@ -84,7 +84,7 @@ class GridRangeValues extends Component {
                         aria-labelledby={"discrete-slider"}
                         valueLabelDisplay={"on"}
                         marks={this.props.marks}
-                        value={this.state.value}
+                        value={this.props.value}
                         onChange={this.onChange}
                         getAriaValueText={this.display_value}
                     />

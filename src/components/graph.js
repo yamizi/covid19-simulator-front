@@ -50,9 +50,9 @@ class Graph extends Component {
           <defs>
             <linearGradient id={this.feature} x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor={this.color} 
-              stopOpacity={ ((this.props.showAreaOnConfidenceInterval && this.props.showAreaOnConfidenceInterval) || !this.props.showConfidenceInterval) ? 1: 0 } />
+              stopOpacity={ this.props.showAreaOnConfidenceInterval ? 1: 0 } />
               <stop offset="100%" stopColor={this.color} 
-              stopOpacity={ ((this.props.showAreaOnConfidenceInterval && this.props.showAreaOnConfidenceInterval) || !this.props.showConfidenceInterval) ? 0.1: 0 } />
+              stopOpacity={ this.props.showAreaOnConfidenceInterval ? 0.1: 0 } />
             </linearGradient>
 
             {(this.props.showConfidenceInterval) ?
