@@ -334,16 +334,16 @@ function getTodaysDate(){
 }
 
 export const defaultRebornMeasureTypes = [
-    { id: 0, measure: "Belgium border", date:getTodaysDate(), value:0, label:'Open' },
-    { id: 1, measure: "French border", date:getTodaysDate(), value:0, label:'Open' },
-    { id: 2, measure: "German border", date:getTodaysDate(), value:0, label:'Open' },
-    { id: 3, measure: "Schools", date:getTodaysDate(), value:0, label:'Open' },
-    { id: 4, measure: "Public Gathering", date:getTodaysDate(), value:0, label:'Yes' },
-    { id: 5, measure: "Private Social Gathering", date:getTodaysDate(), value:100, label:'No R' },
-    { id: 6, measure: "Parks", date:getTodaysDate(), value:0, label:'Open' },
-    { id: 7, measure: "Travel allowed", date:getTodaysDate(), value:0, label:'Yes' },
-    { id: 8, measure: "Economic Activity Restriction", date:getTodaysDate(), value:0, label:'None' },
-    { id: 9, measure: "Strict Respect of Government Measures", date:getTodaysDate(), value:0, label:'Yes' }
+    { id: 0, measure: "Belgium border", value:0, label:'Open' },
+    { id: 1, measure: "French border", value:0, label:'Open' },
+    { id: 2, measure: "German border", value:0, label:'Open' },
+    { id: 3, measure: "Schools", value:0, label:'Open' },
+    { id: 4, measure: "Public Gathering", value:0, label:'Yes' },
+    { id: 5, measure: "Private Social Gathering", value:100, label:'No R' },
+    { id: 6, measure: "Parks", value:0, label:'Open' },
+    { id: 7, measure: "Travel allowed", value:0, label:'Yes' },
+    { id: 8, measure: "Economic Activity Restriction", value:0, label:'None' },
+    { id: 9, measure: "Strict Respect of Government Measures", value:0, label:'Yes' }
 ]
 
 export const rebornMeasureToApiMeasures = {

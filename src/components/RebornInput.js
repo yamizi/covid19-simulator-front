@@ -3,6 +3,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import styled from "@emotion/styled"
 import moment from "moment"
+import TextField from '@material-ui/core/TextField';
 
 import ReactDataGrid from "react-data-grid"
 import { Editors } from "react-data-grid-addons"
@@ -60,7 +61,6 @@ const columns = [
         name: "Measure",
         editor: measureTypeEditor,
     },
-    { key: "date", name: "Date", editable: true, editor: <GridDatePicker /> },
     {
         key: "value",
         name: "Value",
@@ -196,6 +196,15 @@ class Covid19Form extends React.Component {
         });
     }
 
+    updateDateState(newDate){
+        
+        this.setState({
+            date_1:newDate
+        });
+
+        
+    }
+
     handleMenuClose_1 = () => {
         this.setState(() => ({ menuAnchorEl_1: null }))
     }
@@ -240,13 +249,8 @@ class Covid19Form extends React.Component {
             for (let i = fromRow; i <= toRow; i++) {
                 rows_1[i] = { ...rows_1[i], ...updated }
             }
-            let r = rows_1
-            if (updated.date !== undefined) {
-                this.global_date_1 = updated.date
-                r = rows_1.map(row => ({ ...row, ...updated }))
-            }
 
-            return { rows_1: r }
+            return { rows_1: rows_1 }
         })
     }
 
@@ -256,13 +260,9 @@ class Covid19Form extends React.Component {
             for (let i = fromRow; i <= toRow; i++) {
                 rows_2[i] = { ...rows_2[i], ...updated }
             }
-            let r = rows_2
-            if (updated.date !== undefined) {
-                this.global_date_2 = updated.date
-                r = rows_2.map(row => ({ ...row, ...updated }))
-            }
 
-            return { rows_2: r }
+
+            return { rows_2: rows_2 }
         })
     }
 
@@ -314,21 +314,21 @@ class Covid19Form extends React.Component {
         )
 
         var measures = selectedLines.map(e => rebornMeasureToApiMeasures[e.measure]);
-        const dates = selectedLines.map(e => e.date);
+        const dates = [this.state.date_1];
         var values = selectedLines.map(e => e.label);
         values = values.map((v) => v.toLowerCase());
 
         console.log(values);
         console.log(this.state.rows_1);
 
-        for(let i=0; i<measures.length; i++){
+        for (let i = 0; i < measures.length; i++) {
             var tmp_measure = measures[i];
 
-            if(tmp_measure in marksToApiValue){
+            if (tmp_measure in marksToApiValue) {
                 let tmp_value = marksToApiValue[tmp_measure][values[i]];
                 values[i] = tmp_value;
             }
-        } 
+        }
 
         this.setState({
             reproduction_path: "",
@@ -339,6 +339,8 @@ class Covid19Form extends React.Component {
             loading_1: true,
         })
 
+        console.log('******')
+        console.log(this.state.rows_1);
         console.log(measures);
         console.log(dates);
         console.log(values);
@@ -356,7 +358,7 @@ class Covid19Form extends React.Component {
                     df.map(function (o) {
                         return o.Herd_immunity
                     })
-                )
+                )   
             )
             df.forEach(entry => (entry.Date = new Date(entry.Date)))
             df.forEach(entry => (entry.MaxHerd_immunity = max_herd))
@@ -487,7 +489,7 @@ class Covid19Form extends React.Component {
     }
 
 
-    updateLabel(rowId, newLabel){
+    updateLabel(rowId, newLabel) {
         var row1 = this.state.rows_1;
         row1[rowId].label = newLabel;
         this.state.rows_1 = row1;
@@ -527,7 +529,6 @@ class Covid19Form extends React.Component {
             row = {
                 id: props.row.id,
                 measure: props.row.measure,
-                date: props.row.date,
                 value: (
                     <GridRangeValues
                         onValueChange={this.onSliderValueChange}
@@ -542,7 +543,7 @@ class Covid19Form extends React.Component {
                 ),
             }
 
-        }else if (
+        } else if (
             yes_no_values.some(
                 v => v.toLowerCase() === props.row.measure.toLowerCase()
             )
@@ -555,7 +556,6 @@ class Covid19Form extends React.Component {
             row = {
                 id: props.row.id,
                 measure: props.row.measure,
-                date: props.row.date,
                 value: (
                     <GridRangeValues
                         onValueChange={this.onSliderValueChange}
@@ -583,7 +583,6 @@ class Covid19Form extends React.Component {
             row = {
                 id: props.row.id,
                 measure: props.row.measure,
-                date: props.row.date,
                 value: (
                     <GridRangeValues
                         onValueChange={this.onSliderValueChange}
@@ -598,7 +597,7 @@ class Covid19Form extends React.Component {
                     />
                 ),
             }
-            
+
             this.updateLabel(props.row.id, props.row.label);
 
 
@@ -616,7 +615,6 @@ class Covid19Form extends React.Component {
             row = {
                 id: props.row.id,
                 measure: props.row.measure,
-                date: props.row.date,
                 value: (
                     <GridRangeValues
                         onValueChange={this.onSliderValueChange}
@@ -644,7 +642,6 @@ class Covid19Form extends React.Component {
             row = {
                 id: props.row.id,
                 measure: props.row.measure,
-                date: props.row.date,
                 value: (
                     <GridRangeValues
                         onValueChange={this.onSliderValueChange}
@@ -862,7 +859,7 @@ class Covid19Form extends React.Component {
     }
 
     render() {
-        // console.log(this.state.rows_1);
+        console.log(this.state);
         return (
             <div>
                 <Grid container spacing={3}>
@@ -877,11 +874,35 @@ class Covid19Form extends React.Component {
                         />
                     </Grid>
                     <Grid container justify='center' item xs={12}>
-                        <Grid item xs={10}>
-                            {this.render_grid(1)}
+
+                        <Grid container justify='center' direction="row" spacing={2}>
+                            <Grid item xs={7}>
+                                {this.render_grid(1)}
+                            </Grid>
+                            <Grid item xs={3}>
+                                <div style={{display:'flex'}}> 
+                                    <p style={{paddingTop:'10px'}}>Date :</p>
+                                    <form noValidate>
+                                        <TextField
+                                            id="date"
+                                            label=''
+                                            type="date"
+                                            defaultValue={moment().format('YYYY-MM-DD')}
+                                            onChange={(e)=>{
+                                                this.updateDateState(e.target.value);
+                                            }}
+                                            InputLabelProps={{
+                                            shrink: true,
+                                            }}
+                                        />
+                                        </form>
+
+                                </div>
+                            </Grid>
                         </Grid>
+
                         <Grid item xs={12}>
-                            {this.render_graph(1)} 
+                            {this.render_graph(1)}
                         </Grid>
                     </Grid>
                 </Grid>
