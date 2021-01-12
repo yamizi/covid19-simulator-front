@@ -18,7 +18,7 @@ function Reborn() {
     return (
         <Layout>
             <SEO title="Reborn" />
-            {/* <Disclaimer /> */}
+            <Disclaimer />
             <Content>
                 <h1>COVID-19 Adaptive Exit Strategies Finder</h1>
                 <LoadableReborn/>
