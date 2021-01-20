@@ -31,14 +31,11 @@ import {
     Menu,
 } from "@material-ui/core"
 
-import GridDatePicker from "./griddatepicker"
 import GridRangeValues from "./gridrangevalue"
 import RebornInputTutorial from "./rebornInputTutorial"
-import LoadSaveDialog from "./load_save_scenarios"
 import { defaultRebornMeasureTypes, rebornScenarios, RebornMeasureTypes, rebornMeasureToApiMeasures, marksToApiValue } from "./constants"
 
 import API from "./api"
-import Chart from "./chart"
 
 const styles = () => ({
     left: {
@@ -72,7 +69,6 @@ const columns = [
 class Covid19Form extends React.Component {
     constructor(props) {
         super(props)
-        //localStorage.clear()
         this.global_date_1 = moment().format("YYYY-MM-DD")
         this.global_date_2 = moment().format("YYYY-MM-DD")
         this.state = {
@@ -196,13 +192,13 @@ class Covid19Form extends React.Component {
         });
     }
 
-    updateDateState(newDate){
-        
+    updateDateState(newDate) {
+
         this.setState({
-            date_1:newDate
+            date_1: newDate
         });
 
-        
+
     }
 
     handleMenuClose_1 = () => {
@@ -318,9 +314,6 @@ class Covid19Form extends React.Component {
         var values = selectedLines.map(e => e.label);
         values = values.map((v) => v.toLowerCase());
 
-        console.log(values);
-        console.log(this.state.rows_1);
-
         for (let i = 0; i < measures.length; i++) {
             var tmp_measure = measures[i];
 
@@ -339,12 +332,6 @@ class Covid19Form extends React.Component {
             loading_1: true,
         })
 
-        console.log('******')
-        console.log(this.state.rows_1);
-        console.log(measures);
-        console.log(dates);
-        console.log(values);
-
         API.post(`predict_reborn`, {
             country_name: this.state.countryName_1,
             measures: [measures],
@@ -358,7 +345,7 @@ class Covid19Form extends React.Component {
                     df.map(function (o) {
                         return o.Herd_immunity
                     })
-                )   
+                )
             )
             df.forEach(entry => (entry.Date = new Date(entry.Date)))
             df.forEach(entry => (entry.MaxHerd_immunity = max_herd))
@@ -859,9 +846,10 @@ class Covid19Form extends React.Component {
     }
 
     render() {
-        console.log(this.state);
         return (
             <div>
+
+
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <HeaderAuthors>
@@ -872,30 +860,30 @@ class Covid19Form extends React.Component {
                             run={this.state.inputTutorial}
                             callback={this.callbackHelpMeasure}
                         />
+
                     </Grid>
                     <Grid container justify='center' item xs={12}>
-
                         <Grid container justify='center' direction="row" spacing={2}>
                             <Grid item xs={7}>
                                 {this.render_grid(1)}
                             </Grid>
                             <Grid item xs={3}>
-                                <div style={{display:'flex'}}> 
-                                    <p style={{paddingTop:'10px'}}>Date :</p>
+                                <div class="dateDiv">
+                                    <p >Date :</p>
                                     <form noValidate>
                                         <TextField
                                             id="date"
                                             label=''
                                             type="date"
                                             defaultValue={moment().format('YYYY-MM-DD')}
-                                            onChange={(e)=>{
+                                            onChange={(e) => {
                                                 this.updateDateState(e.target.value);
                                             }}
                                             InputLabelProps={{
-                                            shrink: true,
+                                                shrink: true,
                                             }}
                                         />
-                                        </form>
+                                    </form>
 
                                 </div>
                             </Grid>

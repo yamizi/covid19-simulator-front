@@ -24,7 +24,7 @@ class RebornInputTutorial extends Component {
                             <React.Fragment>
                                 This table contains all the measure that will be
                                 applied. A measure is defined by a type of
-                                activity, a date at which it starts and a value
+                                activity and a value
                                 defining the intensity of the activity. By
                                 inserting rows which define specific measure,
                                 you can run simulation with different scenarios
@@ -49,7 +49,7 @@ class RebornInputTutorial extends Component {
                                 </p>
                                 <ul>
                                     <li>
-                                        <strong>Belgium, German and French border :</strong> Mobility
+                                        <strong>Belgium, German and French borders :</strong> Mobility
                                         for specific neighboring countries.
                                     </li>
                                     <li>
@@ -59,8 +59,7 @@ class RebornInputTutorial extends Component {
                                         <strong>Public Gathering :</strong> To prevent or not public events for example.
                                     </li>
                                     <li>
-                                        <strong>Private Social Gathering :</strong> Defining the number of people 
-                                        we are able to see.  
+                                        <strong>Private Social Gathering :</strong> Defining the number of person in the private area.
                                     </li>
                                     <li>
                                         <strong>Parks :</strong> To allow park entrance or not. 
@@ -83,21 +82,20 @@ class RebornInputTutorial extends Component {
                     },
                     {
                         target:
-                            "#covid-form-1 > div > div.react-grid-Container > div > div > div.react-grid-Header > div > div > div:nth-child(2) > div",
+                            "#date",
                         title: "Date",
                         content: (
                             <React.Fragment>
-                                Date at which the new value for the type of
-                                activity selected should be set. There is no
-                                concept of an end date, and to end a measure,
-                                create a new row for the same type of activity
-                                with a different value.
+                                Date at which the new value for all
+                                activities selected should be set. 
+                                The selected date will be the center of a 180 days range.
                             </React.Fragment>
                         ),
+                        
                     },
                     {
                         target:
-                            "#covid-form-1 > div > div.react-grid-Container > div > div > div.react-grid-Header > div > div > div:nth-child(3) > div",
+                            "#covid-form-1 > div > div.react-grid-Container > div > div > div.react-grid-Header > div > div > div:nth-child(2) > div",
                         title: "Value",
                         content: (
                             <React.Fragment>
@@ -149,15 +147,13 @@ class RebornInputTutorial extends Component {
                                 </p>
                                 <ul>
                                     <li>
-                                        <strong>Brutal Strategie:</strong> All
-                                        confinement measures are apllied at the lowest
-                                        value on the May 11, 2020.
+                                        <strong>Full-lockdown</strong> All
+                                        confinement measures are apllied at the highest
+                                        value on the selected date.
                                     </li>
                                     <li>
-                                        <strong>Cyclic Strategie:</strong> All
-                                        measure a lifted periodically before
-                                        being put back in place in order to
-                                        smooth the effect.
+                                        <strong>No-lockdown</strong> All measures 
+                                        will be set at the lowest value on the selected date.
                                     </li>
                                 </ul>
                             </React.Fragment>
@@ -169,7 +165,7 @@ class RebornInputTutorial extends Component {
                         content: (
                             <React.Fragment>
                                 Once you are satisfied with your scenario, you
-                                can click the play button to launche the
+                                can click the play button to launch the
                                 simulation. This button triggers a call to our
                                 servers which will run the simulation and return
                                 a result. This process typically takes less than
@@ -178,6 +174,8 @@ class RebornInputTutorial extends Component {
                                 this form, depicting the evolution of different
                                 metrics, such as the number of cases, number of
                                 death, etc. over the simulation period.
+                                Please note that only selected rows will 
+                                be take into account in the simulation.
                             </React.Fragment>
                         ),
                     }
@@ -211,6 +209,18 @@ class RebornInputTutorial extends Component {
                 disableOverlayClose
                 continuous
                 showProgress
+                disableOverlay
+                styles={{
+                    options: {
+                      arrowColor: '#e3ffeb',
+                      backgroundColor: '#e3ffeb',
+                      overlayColor: 'rgba(0, 0, 0, 0.4)',
+                      primaryColor: '#000',
+                      textColor: '#004a14',
+                      width: 900,
+                      zIndex: 5,
+                      
+                    }}}
             />
         )
     }

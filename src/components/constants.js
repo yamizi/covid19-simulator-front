@@ -268,7 +268,7 @@ export const scenarios = [
 
 export const rebornScenarios = [
     {
-        id: "full-lockdown",
+        id: "Full-lockdown",
         mitigations: [
             { id: 0, measure: "Belgium border", date: getTodaysDate(), value: 100, label:'Close' },
             { id: 1, measure: "French border", date: getTodaysDate(), value: 100, label:'Close' },
@@ -283,7 +283,7 @@ export const rebornScenarios = [
         ],
     }
     ,{
-        id: "no-lockdown",
+        id: "No-lockdown",
         mitigations: [
             { id: 0, measure: "Belgium border", date: getTodaysDate(), value: 0, label:'Open' },
             { id: 1, measure: "French border", date: getTodaysDate(), value: 0, label:'Open' },
