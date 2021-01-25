@@ -3,12 +3,12 @@ import React from "react"
 import PropTypes from "prop-types"
 import styled from "@emotion/styled"
 import moment from "moment"
-import TextField from '@material-ui/core/TextField';
 
 import ReactDataGrid from "react-data-grid"
 import { Editors } from "react-data-grid-addons"
 import Loader from "react-loader-spinner"
 import Caroussel from './carrousel'
+import UserDate from './userDate'
 
 import {
     AddCircleRounded,
@@ -116,8 +116,8 @@ class Covid19Form extends React.Component {
                     id: previousState.increment_1,
                     measure: "Belgium border",
                     date: this.global_date_1,
-                    value: 100,
-                    label: 'Close'
+                    value: 0,
+                    label: 'Open'
                 },
             ],
             increment_1: previousState.increment_1 + 1,
@@ -192,14 +192,14 @@ class Covid19Form extends React.Component {
         });
     }
 
-    updateDateState(newDate) {
 
+    updateDateState(newDate){
         this.setState({
-            date_1: newDate
-        });
-
-
+            date_1:newDate
+        })
     }
+
+
 
     handleMenuClose_1 = () => {
         this.setState(() => ({ menuAnchorEl_1: null }))
@@ -305,15 +305,11 @@ class Covid19Form extends React.Component {
     }
 
     handleSubmit_1 = () => {
-        const selectedLines = this.state.rows_1.filter(
-            value => this.state.selectedIndexes_1.indexOf(value.id) !== -1
-        )
-
-        var measures = selectedLines.map(e => rebornMeasureToApiMeasures[e.measure]);
+        var measures = this.state.rows_1.map(e => rebornMeasureToApiMeasures[e.measure]);
         const dates = [this.state.date_1];
-        var values = selectedLines.map(e => e.label);
+        var values = this.state.rows_1.map(e => e.label);
         values = values.map((v) => v.toLowerCase());
-
+        
         for (let i = 0; i < measures.length; i++) {
             var tmp_measure = measures[i];
 
@@ -772,24 +768,6 @@ class Covid19Form extends React.Component {
                                 ? this.onGridRowsUpdated_1
                                 : this.onGridRowsUpdated_2
                         }
-
-                        rowSelection={{
-                            showCheckbox: true,
-                            onRowsSelected:
-                                num === 1
-                                    ? this.onRowsSelected_1
-                                    : this.onRowsSelected_2,
-                            onRowsDeselected:
-                                num === 1
-                                    ? this.onRowsDeselected_1
-                                    : this.onRowsDeselected_2,
-                            selectBy: {
-                                indexes:
-                                    num === 1
-                                        ? this.state.selectedIndexes_1
-                                        : this.state.selectedIndexes_2,
-                            },
-                        }}
                     />
                 </FormControl>
             </Grid>
@@ -846,10 +824,9 @@ class Covid19Form extends React.Component {
     }
 
     render() {
+        console.log(this.state);
         return (
             <div>
-
-
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <HeaderAuthors>
@@ -869,22 +846,7 @@ class Covid19Form extends React.Component {
                             </Grid>
                             <Grid item xs={3}>
                                 <div class="dateDiv">
-                                    <p >Date :</p>
-                                    <form noValidate>
-                                        <TextField
-                                            id="date"
-                                            label=''
-                                            type="date"
-                                            defaultValue={moment().format('YYYY-MM-DD')}
-                                            onChange={(e) => {
-                                                this.updateDateState(e.target.value);
-                                            }}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                        />
-                                    </form>
-
+                                    <UserDate updateCallback={this.updateDateState.bind(this)}/>
                                 </div>
                             </Grid>
                         </Grid>
