@@ -313,6 +313,9 @@ class Covid19Form extends React.Component {
         var values = this.state.rows_1.map(e => e.label);
         values = values.map((v) => (typeof v === "string") ? v.toLowerCase() : v);
 
+        console.log(measures);
+        console.log(values);
+
         for (let i = 0; i < measures.length; i++) {
             var tmp_measure = measures[i];
 
@@ -718,11 +721,8 @@ class Covid19Form extends React.Component {
             ];
 
             const labels = marks.map(m => m.label);
-
-            if (labels.indexOf(props.row.label) === -1) {
-                value = 0;
-                props.row.label = marks[0].label;
-            }
+            props.row.label = value;
+            
 
             row = {
                 id: props.row.id,
@@ -738,6 +738,7 @@ class Covid19Form extends React.Component {
                 ),
             }
         }
+        this.updateLabel(props.row.id, props.row.label, value);
         props = { ...props, row }
         return <div>{renderBaseRow(props)}</div>
     }
