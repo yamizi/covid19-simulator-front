@@ -69,8 +69,8 @@ const columns = [
 class Covid19Form extends React.Component {
     constructor(props) {
         super(props)
-        this.global_date_1 = moment().format("YYYY-MM-DD")
-        this.global_date_2 = moment().format("YYYY-MM-DD")
+        this.global_date_1 = moment('2020-08-01').format("YYYY-MM-DD")
+        this.global_date_2 = moment('2020-08-01').format("YYYY-MM-DD")
         this.state = {
             countryName_1: "Luxembourg",
             countryName_2: "Luxembourg",
@@ -141,12 +141,9 @@ class Covid19Form extends React.Component {
     }
 
     handleDeleteMeasureClick_1 = () => {
-        var new_rows = []
-        for (var i = 0; i < this.state.rows_1.length; i++) {
-            if (this.state.selectedIndexes_1.indexOf(i) === -1) {
-                new_rows.push(this.state.rows_1[i])
-            }
-        }
+        var new_rows = this.state.rows_1;
+        new_rows.pop();
+
         this.setState(previousState => ({
             rows_1: new_rows,
             selectedIndexes_1: [],
@@ -193,9 +190,9 @@ class Covid19Form extends React.Component {
     }
 
 
-    updateDateState(newDate){
+    updateDateState(newDate) {
         this.setState({
-            date_1:newDate
+            date_1: newDate
         })
     }
 
@@ -304,12 +301,18 @@ class Covid19Form extends React.Component {
         this.savedState = null
     }
 
+
+    isNumeric(str) {
+        if (typeof str != "string") return false
+        return !isNaN(str) && !isNaN(parseFloat(str))
+    }
+
     handleSubmit_1 = () => {
         var measures = this.state.rows_1.map(e => rebornMeasureToApiMeasures[e.measure]);
         const dates = [this.state.date_1];
         var values = this.state.rows_1.map(e => e.label);
-        values = values.map((v) => v.toLowerCase());
-        
+        values = values.map((v) => (typeof v === "string") ? v.toLowerCase() : v);
+
         for (let i = 0; i < measures.length; i++) {
             var tmp_measure = measures[i];
 
@@ -472,14 +475,19 @@ class Covid19Form extends React.Component {
     }
 
 
-    updateLabel(rowId, newLabel) {
+    updateLabel(rowId, newLabel, newValue) {
         var row1 = this.state.rows_1;
         row1[rowId].label = newLabel;
+        row1[rowId].value = newValue;
         this.state.rows_1 = row1;
     }
 
 
     row_renderer = ({ renderBaseRow, ...props }) => {
+
+        // console.log('bonjour');
+        // console.log('au revoir')
+
 
         const two_values = [
             "Belgium border",
@@ -497,17 +505,34 @@ class Covid19Form extends React.Component {
         const three_values = ["Economic Activity Restriction"]
         const four_values = ["Schools"]
         const five_values = ["Private Social Gathering"]
+        const range_values = {
+            "Number of persons vaccinated per week": [0, 30000]
+        }
         let row = {}
+
+
 
         if (
             two_values.some(
                 v => v.toLowerCase() === props.row.measure.toLowerCase()
             )
         ) {
-            const value =
+            var value =
                 typeof props.row.value === "number" && props.row.value !== null
                     ? props.row.value
                     : 0
+
+            const marks = [
+                { value: 0, label: "Open" },
+                { value: 100, label: "Close" },
+            ];
+
+            const labels = marks.map(m => m.label);
+
+            if (labels.indexOf(props.row.label) === -1) {
+                value = 0;
+                props.row.label = marks[0].label;
+            }
 
             row = {
                 id: props.row.id,
@@ -517,24 +542,35 @@ class Covid19Form extends React.Component {
                         onValueChange={this.onSliderValueChange}
                         id={props.row.id}
                         value={value}
-                        step={0}
-                        marks={[
-                            { value: 0, label: "Open" },
-                            { value: 100, label: "Close" },
-                        ]}
+                        step={null}
+                        marks={marks}
                     />
                 ),
             }
+
+            this.updateLabel(props.row.id, props.row.label, value);
 
         } else if (
             yes_no_values.some(
                 v => v.toLowerCase() === props.row.measure.toLowerCase()
             )
         ) {
-            const value =
+            var value =
                 typeof props.row.value === "number" && props.row.value !== null
                     ? props.row.value
                     : 0
+
+            const marks = [
+                { value: 0, label: "Yes" },
+                { value: 100, label: "No" },
+            ];
+
+            const labels = marks.map(m => m.label);
+
+            if (labels.indexOf(props.row.label) === -1) {
+                value = 0;
+                props.row.label = marks[0].label;
+            }
 
             row = {
                 id: props.row.id,
@@ -544,24 +580,35 @@ class Covid19Form extends React.Component {
                         onValueChange={this.onSliderValueChange}
                         id={props.row.id}
                         value={value}
-                        step={0}
-                        marks={[
-                            { value: 0, label: "Yes" },
-                            { value: 100, label: "No" },
-                        ]}
+                        step={null}
+                        marks={marks}
                     />
                 ),
             }
+            this.updateLabel(props.row.id, props.row.label, value);
 
         } else if (
             three_values.some(
                 v => v.toLowerCase() === props.row.measure.toLowerCase()
             )
         ) {
-            const value =
+            var value =
                 typeof props.row.value === "number" && props.row.value !== null
                     ? props.row.value
                     : 0
+
+            const marks = [
+                { value: 0, label: "None" },
+                { value: 50, label: "Full" },
+                { value: 100, label: "Mixed" },
+            ];
+
+            const labels = marks.map(m => m.label);
+
+            if (labels.indexOf(props.row.label) === -1) {
+                value = 0;
+                props.row.label = marks[0].label;
+            }
 
             row = {
                 id: props.row.id,
@@ -571,29 +618,36 @@ class Covid19Form extends React.Component {
                         onValueChange={this.onSliderValueChange}
                         id={props.row.id}
                         value={value}
-                        step={0}
-                        marks={[
-                            { value: 0, label: "None" },
-                            { value: 50, label: "Full" },
-                            { value: 100, label: "Mixed" },
-                        ]}
+                        step={null}
+                        marks={marks}
                     />
                 ),
             }
 
-            this.updateLabel(props.row.id, props.row.label);
-
+            this.updateLabel(props.row.id, props.row.label, value);
 
         } else if (
             four_values.some(
                 v => v.toLowerCase() === props.row.measure.toLowerCase()
             )
         ) {
-            const value =
+            var value =
                 typeof props.row.value === "number" && props.row.value !== null
                     ? props.row.value
                     : 0
+            const marks = [
+                { value: 0, label: "Open" },
+                { value: 33, label: "OWSD" },
+                { value: 66, label: "PO" },
+                { value: 100, label: "Close" },
+            ];
 
+            const labels = marks.map(m => m.label);
+
+            if (labels.indexOf(props.row.label) === -1) {
+                value = 0;
+                props.row.label = marks[0].label;
+            }
 
             row = {
                 id: props.row.id,
@@ -603,13 +657,8 @@ class Covid19Form extends React.Component {
                         onValueChange={this.onSliderValueChange}
                         id={props.row.id}
                         value={value}
-                        step={0}
-                        marks={[
-                            { value: 0, label: "Open" },
-                            { value: 33, label: "OWSD" },
-                            { value: 66, label: "PO" },
-                            { value: 100, label: "Close" },
-                        ]}
+                        step={null}
+                        marks={marks}
                     />
                 ),
             }
@@ -618,10 +667,27 @@ class Covid19Form extends React.Component {
                 v => v.toLowerCase() === props.row.measure.toLowerCase()
             )
         ) {
-            const value =
+            var value =
                 typeof props.row.value === "number" && props.row.value !== null
                     ? props.row.value
                     : 0
+
+            const marks = [
+                { value: 0, label: "None" },
+                { value: 25, label: "5P" },
+                { value: 50, label: "10P" },
+                { value: 75, label: "20P" },
+                { value: 100, label: "No R" },
+            ];
+
+            const labels = marks.map(m => m.label);
+
+            if (labels.indexOf(props.row.label) === -1) {
+                value = 0;
+                props.row.label = marks[0].label;
+            }
+
+
             row = {
                 id: props.row.id,
                 measure: props.row.measure,
@@ -630,18 +696,47 @@ class Covid19Form extends React.Component {
                         onValueChange={this.onSliderValueChange}
                         id={props.row.id}
                         value={value}
-                        step={0}
-                        marks={[
-                            { value: 0, label: "None" },
-                            { value: 25, label: "5P" },
-                            { value: 50, label: "10P" },
-                            { value: 75, label: "20P" },
-                            { value: 100, label: "No R" },
-                        ]}
+                        step={null}
+                        marks={marks}
                     />
                 ),
             }
-            this.updateLabel(props.row.id, props.row.label);
+            this.updateLabel(props.row.id, props.row.label, value);
+        } else if (
+            Object.keys(range_values).some(
+                v => v.toLowerCase() === props.row.measure.toLowerCase()
+            )
+        ) {
+            var value =
+                typeof props.row.value === "number" && props.row.value !== null
+                    ? props.row.value
+                    : 0
+
+            const marks = [
+                { value: 0, label: 0 },
+                { value: 100, label: 30000 },
+            ];
+
+            const labels = marks.map(m => m.label);
+
+            if (labels.indexOf(props.row.label) === -1) {
+                value = 0;
+                props.row.label = marks[0].label;
+            }
+
+            row = {
+                id: props.row.id,
+                measure: props.row.measure,
+                value: (
+                    <GridRangeValues
+                        onValueChange={this.onSliderValueChange}
+                        id={props.row.id}
+                        value={value}
+                        step={10}
+                        marks={marks}
+                    />
+                ),
+            }
         }
         props = { ...props, row }
         return <div>{renderBaseRow(props)}</div>
@@ -824,7 +919,7 @@ class Covid19Form extends React.Component {
     }
 
     render() {
-        console.log(this.state);
+        console.log(this.state.rows_1);
         return (
             <div>
                 <Grid container spacing={3}>
@@ -846,7 +941,7 @@ class Covid19Form extends React.Component {
                             </Grid>
                             <Grid item xs={3}>
                                 <div class="dateDiv">
-                                    <UserDate updateCallback={this.updateDateState.bind(this)}/>
+                                    <UserDate updateCallback={this.updateDateState.bind(this)} />
                                 </div>
                             </Grid>
                         </Grid>

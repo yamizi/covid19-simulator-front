@@ -279,7 +279,8 @@ export const rebornScenarios = [
             { id: 6, measure: "Parks", date: getTodaysDate(), value: 100, label:'Close' },
             { id: 7, measure: "Travel allowed", date: getTodaysDate(), value: 100, label:'No' },
             { id: 8, measure: "Economic Activity Restriction", date: getTodaysDate(), value: 50, label:'Full' },
-            { id: 9, measure: "Strict Respect of Government Measures", date: getTodaysDate(), value: 0, label:'Yes' }
+            { id: 9, measure: "Strict Respect of Government Measures", date: getTodaysDate(), value: 0, label:'Yes' },
+            { id: 10, measure: "Number of persons vaccinated per week", value:0, label:0 },
         ],
     }
     ,{
@@ -294,7 +295,8 @@ export const rebornScenarios = [
             { id: 6, measure: "Parks", date: getTodaysDate(), value: 0, label:'Open' },
             { id: 7, measure: "Travel allowed", date: getTodaysDate(), value: 0, label:'Yes' },
             { id: 8, measure: "Economic Activity Restriction", date: getTodaysDate(), value: 0, label:'None' },
-            { id: 9, measure: "Strict Respect of Government Measures", date: getTodaysDate(), value: 0, label:'Yes' }
+            { id: 9, measure: "Strict Respect of Government Measures", date: getTodaysDate(), value: 0, label:'Yes' },
+            { id: 10, measure: "Number of persons vaccinated per week", value:0, label:0 }
         ],
     }
     
@@ -323,6 +325,8 @@ export const RebornMeasureTypes = [
     { id: "travel", value: "Travel allowed" },
     { id: "activity_restr", value: "Economic Activity Restriction" },
     { id: "resp_gov_measure", value: "Strict Respect of Government Measures" },
+    { id: "vaccinated_peer_week", value: "Number of persons vaccinated per week" }
+    
 ]
 
 function getTodaysDate(){
@@ -343,7 +347,8 @@ export const defaultRebornMeasureTypes = [
     { id: 6, measure: "Parks", value:0, label:'Open' },
     { id: 7, measure: "Travel allowed", value:0, label:'Yes' },
     { id: 8, measure: "Economic Activity Restriction", value:0, label:'None' },
-    { id: 9, measure: "Strict Respect of Government Measures", value:0, label:'Yes' }
+    { id: 9, measure: "Strict Respect of Government Measures", value:0, label:'Yes' },
+    { id: 10, measure: "Number of persons vaccinated per week", value:0, label:0 },
 ]
 
 export const rebornMeasureToApiMeasures = {
@@ -356,7 +361,8 @@ export const rebornMeasureToApiMeasures = {
     "Parks": "parks_m",
     "Travel allowed": "travel_m",
     "Economic Activity Restriction": "activity_restr",
-    "Strict Respect of Government Measures": "resp_gov_measure"
+    "Strict Respect of Government Measures": "resp_gov_measure",
+    "Number of persons vaccinated per week": "vaccinated_peer_week"
 }
 
 // TODO Savoir ce qu'est `scocial` dist pour la page web.

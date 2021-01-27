@@ -45,12 +45,6 @@ class UserDate extends React.Component {
         const maxDate = this.state.maxDate;
         const minDate = this.state.minDate;
 
-        console.log(minDate);
-        console.log(maxDate);
-
-        console.log(newDate.target);
-
-
         console.log(maxDate >= newDate && minDate <= newDate);
 
         if(maxDate >= newDate && minDate <= newDate){

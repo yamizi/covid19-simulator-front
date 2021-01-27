@@ -20,11 +20,18 @@ class GridRangeValues extends Component {
 
     onChange = (event, new_value) => {
 
-        const labelFinder = (mark)  => mark.value === new_value; 
-        const currentLabelIndex = this.props.marks.findIndex(labelFinder);
-        const newLabel = this.props.marks[currentLabelIndex].label;
+        var newLabel = ""
+        
+        if (this.props.step === null) {
+            const labelFinder = (mark) => mark.value === new_value;
+            const currentLabelIndex = this.props.marks.findIndex(labelFinder);
+            newLabel = this.props.marks[currentLabelIndex].label;
+        }else{
+            console.log('discrete range.', new_value);
+            newLabel = parseInt(new_value); 
+        }
 
-        if(this.props.onValueChange !== undefined){
+        if (typeof this.props.onValueChange === "function") {
             this.props.onValueChange(this.props.id, new_value, newLabel);
         }
 
@@ -74,8 +81,7 @@ class GridRangeValues extends Component {
                     }}
                 >
                     <Slider
-                        //step={100 / this.props.step}
-                        step={null}
+                        step={this.props.step}
                         min={0}
                         max={100}
                         style={{
