@@ -16,15 +16,12 @@ import {
     PlayCircleFilledWhite,
     CloudDownloadRounded,
     Help,
-    ExpandMore,
 } from "@material-ui/icons"
 import {
     Grid,
     withStyles,
     MenuItem,
     FormControl,
-    // FormHelperText,
-    // Select,
     Toolbar,
     AppBar,
     IconButton,
@@ -70,31 +67,22 @@ class Covid19Form extends React.Component {
     constructor(props) {
         super(props)
         this.global_date_1 = moment('2020-08-01').format("YYYY-MM-DD")
-        this.global_date_2 = moment('2020-08-01').format("YYYY-MM-DD")
         this.state = {
             countryName_1: "Luxembourg",
-            countryName_2: "Luxembourg",
             rows_1: defaultRebornMeasureTypes,
-            rows_2: [],
             selectedIndexes_1: [],
-            selectedIndexes_2: [],
             increment_1: 0,
-            increment_2: 0,
             reproduction_path: "",
             case_path: "",
             hospital_path: "",
             critical_path: "",
             death_path: "",
             data_json_1: "",
-            data_json_2: "",
             loading_1: false,
-            loading_2: false,
             menuAnchorEl_1: null,
-            menuAnchorEl_2: null,
             inputTutorial: false,
             scenarios: rebornScenarios,
             date_1: this.global_date_1,
-            date_2: this.global_date_2,
         }
         this.savedState = null
     }
@@ -124,22 +112,6 @@ class Covid19Form extends React.Component {
         }))
     }
 
-    handleNewMeasureClick_2 = () => {
-        this.setState(previousState => ({
-            rows_2: [
-                ...previousState.rows_2,
-                {
-                    id: previousState.increment_2,
-                    measure: "Belgium border",
-                    date: this.global_date_2,
-                    value: 100,
-                    label: 'Close'
-                },
-            ],
-            increment_2: previousState.increment_2 + 1,
-        }))
-    }
-
     handleDeleteMeasureClick_1 = () => {
         var new_rows = this.state.rows_1;
         new_rows.pop();
@@ -147,19 +119,6 @@ class Covid19Form extends React.Component {
         this.setState(previousState => ({
             rows_1: new_rows,
             selectedIndexes_1: [],
-        }))
-    }
-
-    handleDeleteMeasureClick_2 = () => {
-        var new_rows = []
-        for (var i = 0; i < this.state.rows_2.length; i++) {
-            if (this.state.selectedIndexes_2.indexOf(i) === -1) {
-                new_rows.push(this.state.rows_2[i])
-            }
-        }
-        this.setState(previousState => ({
-            rows_2: new_rows,
-            selectedIndexes_2: [],
         }))
     }
 
@@ -176,7 +135,7 @@ class Covid19Form extends React.Component {
     }
 
     onSliderValueChange = (id, newValue, newLabel) => {
-        const findId = (element) => element.id == id;
+        const findId = (element) => element.id === id;
 
         var state = this.state.rows_1;
         let index = state.findIndex(findId);
@@ -202,10 +161,6 @@ class Covid19Form extends React.Component {
         this.setState(() => ({ menuAnchorEl_1: null }))
     }
 
-    handleMenuClose_2 = () => {
-        this.setState(() => ({ menuAnchorEl_2: null }))
-    }
-
     isLoadMenuOpen = num => {
         return num === 1
             ? this.state.menuAnchorEl_1 != null
@@ -226,16 +181,6 @@ class Covid19Form extends React.Component {
 
     }
 
-    handleScenarioClick_2 = event => {
-        const scenario = this.state.scenarios.filter(
-            (v, i) => v.id === event.currentTarget.id
-        )
-        this.setState(() => ({
-            rows_2: scenario[0].mitigations,
-        }))
-        this.handleMenuClose_2()
-    }
-
     onGridRowsUpdated_1 = ({ fromRow, toRow, updated }) => {
         this.setState(state => {
             const rows_1 = state.rows_1.slice()
@@ -247,17 +192,6 @@ class Covid19Form extends React.Component {
         })
     }
 
-    onGridRowsUpdated_2 = ({ fromRow, toRow, updated }) => {
-        this.setState(state => {
-            const rows_2 = state.rows_2.slice()
-            for (let i = fromRow; i <= toRow; i++) {
-                rows_2[i] = { ...rows_2[i], ...updated }
-            }
-
-
-            return { rows_2: rows_2 }
-        })
-    }
 
     onRowsSelected_1 = rows => {
         var selectedIdx = rows.map(r => r.rowIdx)
@@ -266,26 +200,10 @@ class Covid19Form extends React.Component {
         })
     }
 
-    onRowsSelected_2 = rows => {
-        var selectedIdx = rows.map(r => r.rowIdx)
-        this.setState({
-            selectedIndexes_2: this.state.selectedIndexes_2.concat(selectedIdx),
-        })
-    }
-
     onRowsDeselected_1 = rows => {
         let rowIndexes = rows.map(r => r.rowIdx)
         this.setState({
             selectedIndexes_1: this.state.selectedIndexes_1.filter(
-                i => rowIndexes.indexOf(i) === -1
-            ),
-        })
-    }
-
-    onRowsDeselected_2 = rows => {
-        let rowIndexes = rows.map(r => r.rowIdx)
-        this.setState({
-            selectedIndexes_2: this.state.selectedIndexes_2.filter(
                 i => rowIndexes.indexOf(i) === -1
             ),
         })
@@ -313,9 +231,6 @@ class Covid19Form extends React.Component {
         var values = this.state.rows_1.map(e => e.label);
         values = values.map((v) => (typeof v === "string") ? v.toLowerCase() : v);
 
-        console.log(measures);
-        console.log(values);
-
         for (let i = 0; i < measures.length; i++) {
             var tmp_measure = measures[i];
 
@@ -341,68 +256,27 @@ class Covid19Form extends React.Component {
             values: [values],
         }).then(res => {
             let df = res.data.df
-            const max_herd = Math.ceil(
-                Math.max.apply(
-                    Math,
-                    df.map(function (o) {
-                        return o.Herd_immunity
-                    })
-                )
-            )
+            console.log(df);
+            // const max_herd = Math.ceil(
+            //     Math.max.apply(
+            //         Math,
+            //         df.map(function (o) {
+            //             return o.Herd_immunity
+            //         })
+            //     )
+            // )
             df.forEach(entry => (entry.Date = new Date(entry.Date)))
-            df.forEach(entry => (entry.MaxHerd_immunity = max_herd))
+            // df.forEach(entry => (entry.MaxHerd_immunity = max_herd))
+
+            console.log('[+] Bonjour')
+            console.log(df);
 
             this.setState({
                 data_json_1: df,
                 loading_1: false,
             })
-            console.log(res.data.path, this.state)
         })
 
-    }
-
-    handleSubmit_2 = () => {
-        const selectedLines = this.state.rows_2.filter(
-            value => this.state.selectedIndexes_2.indexOf(value.id) !== -1
-        )
-        const measures = selectedLines.map(e => e.measure)
-        const dates = selectedLines.map(e => e.date)
-        const values = selectedLines.map(e => e.value)
-
-        this.setState({
-            reproduction_path: "",
-            case_path: "",
-            hospital_path: "",
-            critical_path: "",
-            death_path: "",
-            loading_2: true,
-        })
-
-        /* API.post(`predict`, {
-            country_name: this.state.countryName_2,
-            measures: measures,
-            dates: dates,
-            values: values,
-        }).then(res => {
-            let df = res.data.df
-            const max_herd = Math.ceil(
-                Math.max.apply(
-                    Math,
-                    df.map(function(o) {
-                        return o.Herd_immunity
-                    })
-                )
-            )
-
-            df.forEach(entry => (entry.Date = new Date(entry.Date)))
-            df.forEach(entry => (entry.MaxHerd_immunity = max_herd))
-
-            this.setState({
-                data_json_2: df,
-                loading_2: false,
-            })
-            //console.log(res.data.path, this.state)
-        }) */
     }
 
     renderLoadMenu = (num = 1) => {
@@ -440,35 +314,6 @@ class Covid19Form extends React.Component {
         )
     }
 
-    data_to_save = (name, num = 1) => {
-        let { scenarios } = this.state
-        const rows = num === 1 ? this.state.rows_1 : this.state.rows_2
-        const selectedIndexes =
-            num === 1
-                ? this.state.selectedIndexes_1
-                : this.state.selectedIndexes_2
-        let data = rows.filter(
-            value => selectedIndexes.indexOf(value.id) !== -1
-        )
-
-        name = name !== "" ? name : new Date().toISOString()
-
-        let ids = []
-        for (let x of this.state.scenarios) {
-            ids.push(x.id)
-        }
-
-        if (ids.some(v => v === name)) {
-            scenarios.forEach(v => {
-                if (v.id === name) {
-                    v.mitigations = data
-                }
-            })
-        } else {
-            scenarios.push({ id: name, mitigations: data })
-        }
-        return scenarios
-    }
 
     data_to_load = () => {
         const data = JSON.parse(localStorage.getItem("data_saved"))
@@ -476,7 +321,6 @@ class Covid19Form extends React.Component {
             scenarios: data || prevState.scenarios,
         }))
     }
-
 
     updateLabel(rowId, newLabel, newValue) {
         var row1 = this.state.rows_1;
@@ -487,10 +331,6 @@ class Covid19Form extends React.Component {
 
 
     row_renderer = ({ renderBaseRow, ...props }) => {
-
-        // console.log('bonjour');
-        // console.log('au revoir')
-
 
         const two_values = [
             "Belgium border",
@@ -512,8 +352,6 @@ class Covid19Form extends React.Component {
             "Number of persons vaccinated per week": [0, 30000]
         }
         let row = {}
-
-
 
         if (
             two_values.some(
@@ -720,10 +558,8 @@ class Covid19Form extends React.Component {
                 { value: 100, label: 30000 },
             ];
 
-            const labels = marks.map(m => m.label);
             props.row.label = value;
             
-
             row = {
                 id: props.row.id,
                 measure: props.row.measure,
@@ -920,7 +756,6 @@ class Covid19Form extends React.Component {
     }
 
     render() {
-        console.log(this.state.rows_1);
         return (
             <div>
                 <Grid container spacing={3}>

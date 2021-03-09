@@ -60,7 +60,7 @@ const IndexPage = ({ data }) => {
                 color: inherit;
               `}
             >
-              <MarkerHeader>COVID-19 Best Strategie Finder</MarkerHeader>
+              <MarkerHeader>COVID-19 Reborn</MarkerHeader>
               <div>
                 <ArticleDate>January, 2021</ArticleDate>
               </div>

@@ -381,10 +381,12 @@ export const marksToApiValue = {
         'no r': 1000
     },
     "social_dist": ["yes", "no"],
-    "parks_m": { 'open': "yes", 'close': "no" },
+    "parks_m": { 'open': "yes", 'close': "no" },    
     "activity_restr": {
         'none': "open",
         'full': "close",
         'mixed': "mixed"
     }
 }
+
+export const allSectors = ['R_A' ,'R_D' ,'R_F' ,'R_G' ,'R_H' ,'R_I' ,'R_J' ,'R_K' ,'R_M' ,'R_N' ,'R_O' ,'R_P' ,'R_Q' ,'R_S'];

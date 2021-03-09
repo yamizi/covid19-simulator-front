@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Graph from '../components/graph';
 import DoubleAxisGraph from '../components/doubleAxisGraph';
+import MultiLabelGraph from '../components/multiLabelGraph'
 
 import { Brush, LineChart } from 'recharts';
 
@@ -11,6 +12,8 @@ import { makeCorrectStringFromDate } from '../script/dataManager';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
+import { allSectors } from '../components/constants'
+
 
 class Caroussel extends Component {
 
@@ -20,14 +23,20 @@ class Caroussel extends Component {
         this.formatedData = extractData(this.data);
 
         this.state = {
+            checked: false,
             left: this.formatedData[0]['Date'],
             right: this.formatedData[this.formatedData.length - 1]['Date'],
             brushLeft: 0,
-            brushRight: this.formatedData.length - 1,
+            brushRight: this.formatedData.length - 1
         };
+
+        this.ref = React.createRef();
+
     }
 
+
     resetStates() {
+
         this.setState({
             checked: false,
             left: this.formatedData[0]['Date'],
@@ -35,6 +44,11 @@ class Caroussel extends Component {
             brushLeft: 0,
             brushRight: this.formatedData.length - 1
         })
+
+        if(this.ref.current !== null){
+            this.ref.current.resetGraph()
+        }
+
         this.formatedData = this.formatedData.slice();
     }
 
@@ -64,16 +78,18 @@ class Caroussel extends Component {
         });
     }
 
-
     render() {
         const { checked, left, right, brushLeft, brushRight } = this.state;
 
         return (
-            <div style={{marginTop:'20px', minHeight: '85vh' }}>
+            <div style={{ marginTop: '20px', minHeight: '85vh' }}>
 
-                <Tabs onSelect={(selectedTab, lastTab) => { if (selectedTab === 2) return false; }}>
+
+                {/* Here, we make sure that if the end user clicks on the fourth tab nothing appened. */}
+                <Tabs onSelect={(selectedTab, lastTab) => { if (selectedTab === 3) return false; }}>
                     <TabList>
                         <Tab style={{ marginBottom: '0px' }}>Sanitary Indices</Tab>
+                        <Tab style={{ marginBottom: '0px' }}>Reproduction rate by sectors</Tab>
                         <Tab style={{ marginBottom: '0px' }}>Economical indices</Tab>
                         <Tab style={{ marginBottom: '0px', padding: 0, float: "right" }}>
                             <div className='checkbox-wrapper unChecked'>
@@ -132,6 +148,14 @@ class Caroussel extends Component {
 
                         </div>
                     </TabPanel>
+
+                    <TabPanel>
+
+                        <MultiLabelGraph features={allSectors} data={this.formatedData} title='Reproduction rate by sectors'
+                            showConfidenceInterval={checked} domain={[left, right]} ref={this.ref} />
+
+                    </TabPanel>
+
                     <TabPanel>
                         <div className='custom-container'>
                             <Graph feature="unemploy" data={this.formatedData} title='Unemploy'
