@@ -11,7 +11,6 @@ import { Grid } from "@material-ui/core"
 class MultiLabelGraph extends Component {
 
   constructor(props) {
-    console.log("constructor !")
     super(props);
 
     this.confidanceMinColor = '#00bf33';
@@ -20,19 +19,20 @@ class MultiLabelGraph extends Component {
     this.features = props.features;
     this.showConfidenceInterval = props.showConfidenceInterval;
 
+
+    // To display graph annimation only one time.
     this.firstDisplay = false;
 
     this.resetGraph = this.resetGraph.bind(this);
+    this.toolRef = React.createRef();
 
-    this.toolRef = React.createRef(); 
-
-    this.colorPalette = ['#ff1e00','#ff4c00','#ff7000','#ffcd00','#fdff00',
-                         '#16ff00','#00f5ff','#0000ff','#9100ff','#ff00fd',
-                         '#ff00c9','#ff0099','#ff0074','#ff0050','#ff0000'];
+    this.colorPalette = ['#ff1e00', '#ff4c00', '#ff7000', '#ffcd00', '#fdff00',
+      '#16ff00', '#00f5ff', '#0000ff', '#9100ff', '#ff00fd',
+      '#ff00c9', '#ff0099', '#ff0074', '#ff0050', '#ff0000'];
 
     if (props.colors !== undefined) {
       this.colorPalette = props.colors;
-    } 
+    }
 
     if (props.title) {
       this.title = props.title;
@@ -42,14 +42,16 @@ class MultiLabelGraph extends Component {
 
     this.state = {
       graphWidth: 800,
-      highlightMode:0
+      highlightMode: 0
     }
 
     props.features.forEach((key) => {
       this.state[key] = false;
     });
 
-    
+    if(this.props.showObjective){
+      this.state['objective'] = false;
+    }
 
   }
 
@@ -60,46 +62,71 @@ class MultiLabelGraph extends Component {
     return strDate;
   }
 
-  updateHightLight(label, new_value){
+  updateHightLight(label, new_value) {
 
-    let {highlightMode} = this.state;
+    let { highlightMode } = this.state;
 
-    if(new_value){
+    if (new_value) {
       highlightMode++;
-    }else{
+    } else {
       highlightMode--;
     }
 
-
     this.setState({
-      [label]:new_value,
-      highlightMode:highlightMode
+      [label]: new_value,
+      highlightMode: highlightMode
     });
   }
 
 
-  componentDidMount(){
+  componentDidMount() {
     const width = document.getElementById('chart-container').clientWidth;
     this.firstDisplay = true;
-    this.setState({ 
-      graphWidth: width 
-    });  
+    this.setState({
+      graphWidth: width
+    });
   }
 
-  resetGraph(){
+
+  resetGraph() {
     this.toolRef.current.reset();
+  }
+
+  addLineToPlot(feature, index, items, toDisplay){
+    let strokeColor = (this.state.highlightMode === 0 || this.state[feature]) ? this.colorPalette[index] : '#bfbfbf';
+    if (this.state[feature]) {
+      toDisplay.push(feature);
+    }
+
+
+    items.push(
+      ((this.props.showConfidenceInterval && this.state.highlightMode === 0) || (this.state[feature] && this.props.showConfidenceInterval)) ?
+        <Line dataKey={feature + '_max'} isAnimationActive={!this.firstDisplay} stroke={this.confidanceMaxColor} dot={false} />
+        : ''
+    );
+
+    items.push(
+      ((this.props.showConfidenceInterval && this.state.highlightMode === 0) || (this.state[feature] && this.props.showConfidenceInterval)) ?
+        <Line dataKey={feature + '_min'} isAnimationActive={!this.firstDisplay} stroke={this.confidanceMinColor} dot={false} />
+        : ''
+    );
+
+    items.push(
+      <Line dataKey={feature} stroke={strokeColor} dot={false} isAnimationActive={!this.firstDisplay} strokeWidth={(this.state[feature] ? 5 : 1)} />
+    );
+
+    return [items, toDisplay];
   }
 
 
   render() {
     const [left, right] = this.props.domain;
 
-    console.log('RENDER');
-
-    
     var items = [];
     var toDisplay = [];
     var height = 600;
+
+
 
     return (
 
@@ -113,34 +140,16 @@ class MultiLabelGraph extends Component {
               <CartesianGrid strokeDasharray="" />
               <XAxis dataKey="Date" domain={[left, right]} allowDataOverflow={true} type='number' tickFormatter={this.SetDateToString} />
 
+
               {this.features.forEach((feature, index) => {
-
-                let strokeColor = (this.state.highlightMode === 0 || this.state[feature])? this.colorPalette[index] : '#bfbfbf';
-                if(this.state[feature]){
-                  toDisplay.push(feature);
-                }
-
-
-                items.push(
-                  ((this.props.showConfidenceInterval && this.state.highlightMode === 0 )|| (this.state[feature] && this.props.showConfidenceInterval)) ?
-                    <Line dataKey={feature + '_max'} isAnimationActive={!this.firstDisplay} stroke={this.confidanceMaxColor} dot={false} />
-                    : ''
-                );
-
-                items.push(
-                  ((this.props.showConfidenceInterval && this.state.highlightMode === 0 )|| (this.state[feature] && this.props.showConfidenceInterval)) ?
-                    <Line dataKey={feature + '_min'} isAnimationActive={!this.firstDisplay} stroke={this.confidanceMinColor} dot={false} />
-                    : ''
-                );
-
-                items.push(
-                  <Line dataKey={feature} stroke={strokeColor} dot={false} isAnimationActive={!this.firstDisplay} strokeWidth={(this.state[feature]? 5:1)} />
-                );
-
+               [items, toDisplay] = this.addLineToPlot(feature, index ,items, toDisplay);
               })}
 
               <YAxis />
-              <Tooltip content={<CustomTooltip showConfidenceInterval={this.props.showConfidenceInterval} features={toDisplay}/>} />
+
+              { (this.props.showObjective) ? [items, toDisplay] = this.addLineToPlot("objective", this.features.lenght ,items, toDisplay) : '' }
+
+              <Tooltip content={<CustomTooltip showConfidenceInterval={this.props.showConfidenceInterval} features={toDisplay} />} />
 
               {items}
 
@@ -148,8 +157,8 @@ class MultiLabelGraph extends Component {
             </LineChart>
           </Grid>
           <Grid item xs={3}>
-            
-              <MultiLabelTool features={this.features} onChange={this.updateHightLight.bind(this)} ref={this.toolRef}/>
+
+            <MultiLabelTool features={this.features} onChange={this.updateHightLight.bind(this)} ref={this.toolRef} showObjective={this.props.showObjective} />
 
           </Grid>
         </Grid>

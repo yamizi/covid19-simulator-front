@@ -152,7 +152,7 @@ class Caroussel extends Component {
                     <TabPanel>
 
                         <MultiLabelGraph features={allSectors} data={this.formatedData} title='Reproduction rate by sectors'
-                            showConfidenceInterval={checked} domain={[left, right]} ref={this.ref} />
+                            showConfidenceInterval={checked} domain={[left, right]} ref={this.ref} showObjective={true} />
 
                     </TabPanel>
 

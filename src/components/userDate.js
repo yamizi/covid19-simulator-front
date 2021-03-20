@@ -16,7 +16,7 @@ class UserDate extends React.Component {
         this.state = {
             maxDate: maxDate,
             minDate: minDate,
-            date: maxDate
+            date: minDate
         }
 
         this.getMaxDate();
@@ -32,7 +32,8 @@ class UserDate extends React.Component {
             let min_date = res.data.min_date
             this.setState({
                 maxDate:moment(max_date).format('YYYY-MM-DD'),
-                minDate:moment(min_date).format('YYYY-MM-DD')
+                minDate:moment(min_date).format('YYYY-MM-DD'),
+                date:moment(min_date).format('YYYY-MM-DD')
             })
         })
     }
@@ -44,8 +45,6 @@ class UserDate extends React.Component {
     updateDateState(newDate) {
         const maxDate = this.state.maxDate;
         const minDate = this.state.minDate;
-
-        console.log(maxDate >= newDate && minDate <= newDate);
 
         if(maxDate >= newDate && minDate <= newDate){
             this.previousValue = newDate;

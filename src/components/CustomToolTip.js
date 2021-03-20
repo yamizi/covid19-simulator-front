@@ -3,23 +3,12 @@ import { makeCorrectStringFromDate } from '../script/dataManager'
 import { allSectors } from '../components/constants'
 
 import './Caroussel.css'
-
-
-import {
-    Grid,
-    withStyles,
-    MenuItem,
-    FormControl,
-    Toolbar,
-    AppBar,
-    IconButton,
-    Menu,
-} from "@material-ui/core"
+import {Grid} from "@material-ui/core"
 
 class CustomTooltip extends Component {
 
 
-    convertToEasierForm(payload, showConfidenceInterval, featureToDisplay) {
+    convertToEasierForm(payload, showConfidenceInterval, featureToDisplay, showObjective) {
 
         var finalObject = {}
 
@@ -54,13 +43,20 @@ class CustomTooltip extends Component {
 
         });
 
+        if(showObjective){
+            finalObject['objecive'] = {
+                stroke: "#00990d",
+                value: 1
+            }
+        }
+
         return finalObject;
 
     }
 
 
     render() {
-        const { active, payload, label, showConfidenceInterval, features } = this.props;
+        const { active, payload, label, showConfidenceInterval, features, showObjective } = this.props;
 
         var featureToDisplay = allSectors;
 
@@ -71,11 +67,7 @@ class CustomTooltip extends Component {
         if (active && payload && payload.length) {
 
             
-            const fixedPayload = this.convertToEasierForm(payload, showConfidenceInterval, featureToDisplay);
-            
-            console.log(payload);
-            console.log(fixedPayload);
-            console.log(featureToDisplay);
+            const fixedPayload = this.convertToEasierForm(payload, showConfidenceInterval, featureToDisplay, showObjective);
             
             const fixedLabel = makeCorrectStringFromDate(label);
 

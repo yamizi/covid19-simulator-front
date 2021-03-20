@@ -268,9 +268,6 @@ class Covid19Form extends React.Component {
             df.forEach(entry => (entry.Date = new Date(entry.Date)))
             // df.forEach(entry => (entry.MaxHerd_immunity = max_herd))
 
-            console.log('[+] Bonjour')
-            console.log(df);
-
             this.setState({
                 data_json_1: df,
                 loading_1: false,
