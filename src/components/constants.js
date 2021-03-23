@@ -390,3 +390,4 @@ export const marksToApiValue = {
 }
 
 export const allSectors = ['R_A' ,'R_D' ,'R_F' ,'R_G' ,'R_H' ,'R_I' ,'R_J' ,'R_K' ,'R_M' ,'R_N' ,'R_O' ,'R_P' ,'R_Q' ,'R_S'];
+

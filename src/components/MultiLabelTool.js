@@ -4,9 +4,25 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
+var code_to_name = {
+    "R_A":"AGRICULTURE, FORESTRY AND FISHING",
+    "R_D":"ELECTRICITY, GAS, STEAM AND AIR CONDITIONING SUPPLY",
+    "R_F":"CONSTRUCTION",
+    "R_G":"WHOLESALE AND RETAIL TRADE; REPAIR OF MOTOR VEHICLES AND MOTORCYCLES",
+    "R_H":"TRANSPORTATION AND STORAGE",
+    "R_I":"HORECA",
+    "R_J":"INFORMATION AND COMMUNICATION",
+    "R_K":"FINANCIAL AND INSURANCE ACTIVITIES",
+    "R_M":"PROFESSIONAL, SCIENTIFIC AND TECHNICAL ACTIVITIES",
+    "R_N":"ADMINISTRATIVE AND SUPPORT SERVICE ACTIVITIES",
+    "R_O":"PUBLIC ADMINISTRATION AND DEFENCE",
+    "R_P":"EDUCATION",
+    "R_Q":"HUMAN HEALTH AND SOCIAL WORK ACTIVITIES",
+    "R_S":"OTHER SERVICE ACTIVITIES"
+};
+
 
 class MultiLabelTool extends Component {
-
 
     constructor(props) {
         super(props)
@@ -38,14 +54,15 @@ class MultiLabelTool extends Component {
 
     render() {
 
-        var state = this.state;
-
         var items = this.props.features.map((key, index) => {
 
+            let name = code_to_name[key].toLowerCase();
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+
             return (<FormControlLabel
-                control={<Checkbox checked={state[key]} onChange={this.handleChange.bind(this)} name={key} />}
-                label={key}
-            />)
+                control={<Checkbox checked={this.state[key]} onChange={this.handleChange.bind(this)} name={key} />}
+                label={name}
+                />)
         });
 
         return (

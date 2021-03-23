@@ -134,7 +134,8 @@ class Caroussel extends Component {
                                 feature={["SimulationCases_ALL", 'SimulationDeaths_ALL']}
                                 data={this.formatedData}
                                 axis={['left', 'right']} title='Total Cases and Deaths'
-                                showConfidenceInterval={checked} domain={[left, right]} />
+                                showConfidenceInterval={checked} domain={[left, right]}
+                                />
 
                             <Graph
                                 className='cell'
@@ -144,16 +145,16 @@ class Caroussel extends Component {
                             <Graph
                                 className='cell'
                                 feature="R_ALL" data={this.formatedData} title='Reproduction rate'
-                                showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={false} />
+                                showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={false} 
+                                objective={1}
+                                />
 
                         </div>
                     </TabPanel>
 
                     <TabPanel>
-
                         <MultiLabelGraph features={allSectors} data={this.formatedData} title='Reproduction rate by sectors'
-                            showConfidenceInterval={checked} domain={[left, right]} ref={this.ref} />
-
+                            showConfidenceInterval={checked} domain={[left, right]} ref={this.ref} objective={1}/>
                     </TabPanel>
 
                     <TabPanel>
@@ -166,7 +167,6 @@ class Caroussel extends Component {
                                 showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
                             <Graph feature="ipcn" data={this.formatedData} title='IPCN'
                                 showConfidenceInterval={checked} domain={[left, right]} showAreaOnConfidenceInterval={true} />
-
                         </div>
                     </TabPanel>
                 </Tabs>

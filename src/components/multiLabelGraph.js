@@ -94,7 +94,13 @@ class MultiLabelGraph extends Component {
   render() {
     const [left, right] = this.props.domain;
 
-    console.log('RENDER');
+    var data = this.props.data;
+
+    if(this.props.objective !== undefined && Number.isFinite(this.props.objective)){
+      data.map((d) => {
+        d['objective'] = 1
+      });
+    }
 
     
     var items = [];
@@ -140,16 +146,21 @@ class MultiLabelGraph extends Component {
               })}
 
               <YAxis />
-              <Tooltip content={<CustomTooltip showConfidenceInterval={this.props.showConfidenceInterval} features={toDisplay}/>} />
+              <Tooltip content={<CustomTooltip showConfidenceInterval={this.props.showConfidenceInterval} features={toDisplay} objective={this.props.objective}/>} />
 
               {items}
+
+              {(this.props.objective !== undefined && Number.isFinite(this.props.objective)) ?
+                  <Line dataKey={'objective'} stroke={"#33ff33"} dot={false} isAnimationActive={!this.firstDisplay} strokeWidth={3} />
+              : ''}
 
               <Legend />
             </LineChart>
           </Grid>
           <Grid item xs={3}>
             
-              <MultiLabelTool features={this.features} onChange={this.updateHightLight.bind(this)} ref={this.toolRef}/>
+              <MultiLabelTool features={this.features} onChange={this.updateHightLight.bind(this)} 
+                ref={this.toolRef}/>
 
           </Grid>
         </Grid>

@@ -26,6 +26,8 @@ class Graph extends Component {
     } else {
       this.title = props.feature
     }
+
+
   }
 
 
@@ -37,37 +39,52 @@ class Graph extends Component {
   }
 
 
+  addAreaGradient(feature, color){
+    return(
+      <linearGradient id={feature}>
+        <stop offset="5%" stopColor={color} 
+        stopOpacity={ this.props.showAreaOnConfidenceInterval ? 1: 0 } />
+        <stop offset="100%" stopColor={color} 
+        stopOpacity={ this.props.showAreaOnConfidenceInterval ? 0.1: 0 } />
+      </linearGradient>
+    );
+  }
+
+
   render() {
     const [left, right] = this.props.domain;
+
+    var data = this.props.data;
+
+    if(this.props.objective !== undefined && Number.isFinite(this.props.objective)){
+      data.map((d) => {
+        d['objective'] = 1
+      });
+    }
+
 
     return (
       <div>
         <h2 className='graph-title'>{this.title}</h2>
 
-        <AreaChart width={600} height={400} data={this.props.data}
+        <AreaChart width={600} height={400} data={data}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
 
           <defs>
-            <linearGradient id={this.feature} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={this.color} 
-              stopOpacity={ this.props.showAreaOnConfidenceInterval ? 1: 0 } />
-              <stop offset="100%" stopColor={this.color} 
-              stopOpacity={ this.props.showAreaOnConfidenceInterval ? 0.1: 0 } />
-            </linearGradient>
+            {this.addAreaGradient(this.feature, this.color)}
 
             {(this.props.showConfidenceInterval) ?
-              <linearGradient id={this.feature + '_max'} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={this.confidanceMaxColor} stopOpacity={ this.props.showAreaOnConfidenceInterval ? 1 : 0 } />
-                <stop offset="100%" stopColor={this.confidanceMaxColor} stopOpacity={ this.props.showAreaOnConfidenceInterval ? 0.1 : 0 } />
-              </linearGradient>
+              this.addAreaGradient(this.feature + '_max', this.confidanceMaxColor)
               : ''}
 
             {(this.props.showConfidenceInterval) ?
-              <linearGradient id={this.feature + '_min'} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={this.confidanceMinColor} stopOpacity={ this.props.showAreaOnConfidenceInterval ? 1 : 0 } />
-                <stop offset="100%" stopColor={this.confidanceMinColor} stopOpacity={ this.props.showAreaOnConfidenceInterval ? 0.1 : 0 } />
-              </linearGradient>
+              this.addAreaGradient(this.feature + '_min', this.confidanceMinColor)
               : ''}
+
+            {(this.props.objective !== undefined && Number.isFinite(this.props.objective)) ?
+              this.addAreaGradient( 'objective' , "#33ff33")
+              : ''}
+
           </defs>
 
           <CartesianGrid strokeDasharray="" />
@@ -85,6 +102,11 @@ class Graph extends Component {
             : ''}
 
           <Area dataKey={this.feature} stroke={this.color}  fill={"url(#" + this.feature + ")"} />
+
+          {(this.props.objective !== undefined && Number.isFinite(this.props.objective)) ?
+            <Area dataKey={"objective"} stroke={"#33ff33"} strokeWidth={3}  fill={"url(#objective)"} />
+              : ''}
+
 
           <Legend />
         </AreaChart>
