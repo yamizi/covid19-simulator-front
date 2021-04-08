@@ -67,7 +67,7 @@ const columns = [
 class Covid19Form extends React.Component {
     constructor(props) {
         super(props)
-        this.global_date_1 = moment('2020-08-01').format("YYYY-MM-DD")
+        this.global_date_1 = moment('2021-01-01').format("YYYY-MM-DD");
         this.state = {
             countryName_1: "Luxembourg",
             rows_1: defaultRebornMeasureTypes,

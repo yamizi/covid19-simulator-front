@@ -9,9 +9,9 @@ class UserDate extends React.Component {
     constructor(props) {
         super(props)
         // Make default value for dates.
-        var maxDate = moment('2020-08-01').format('YYYY-MM-DD');
-        var minDate = moment('2020-05-30').format('YYYY-MM-DD');
-        this.previousValue = moment('2020-08-01').format('YYYY-MM-DD');
+        var maxDate = moment('2021-02-01').format('YYYY-MM-DD');
+        var minDate = moment('2021-01-30').format('YYYY-MM-DD');
+        this.previousValue = moment('2021-01-01').format('YYYY-MM-DD');
 
         this.state = {
             maxDate: maxDate,
@@ -23,13 +23,13 @@ class UserDate extends React.Component {
     }
 
     getMaxDate(){
-        console.log('[+] API call for dates !')
         API.post(`reborn_api_limit`, {
             
         }).then(res => {
-            console.log(res.data);
-            let max_date = res.data.max_date
-            let min_date = res.data.min_date
+            let max_date = res.data.max_date;
+            let min_date = res.data.min_date;
+            this.previousValue =  min_date;
+
             this.setState({
                 maxDate:moment(max_date).format('YYYY-MM-DD'),
                 minDate:moment(min_date).format('YYYY-MM-DD')
