@@ -10,19 +10,25 @@ import {Grid} from "@material-ui/core"
 
 var code_to_name = {
     "R_A":"AGRICULTURE, FORESTRY AND FISHING",
+    "R_B":'MINING AND QUARRYING',
+    "R_C": "MANUFACTURING",
     "R_D":"ELECTRICITY, GAS, STEAM AND AIR CONDITIONING SUPPLY",
+    "R_E":"WATER SUPPLY; SEWERAGE, WASTE MANAGEMENT AND REMEDIATION ACTIVITIES",
     "R_F":"CONSTRUCTION",
     "R_G":"WHOLESALE AND RETAIL TRADE...",
     "R_H":"TRANSPORTATION AND STORAGE",
     "R_I":"HORECA",
     "R_J":"INFORMATION AND COMMUNICATION",
     "R_K":"FINANCIAL AND INSURANCE ACTIVITIES",
+    "R_L":"REAL ESTATE ACTIVITIES",
     "R_M":"PROFESSIONAL, SCIENTIFIC AND TECHNICAL ACTIVITIES",
-    "R_N":"ADMINISTRATIVE AND SUPPORT SERVICE ACTIVITIES",
+    "R_N":"ADMINISTRATIVE SERVICES",
     "R_O":"PUBLIC ADMINISTRATION AND DEFENCE",
     "R_P":"EDUCATION",
     "R_Q":"HUMAN HEALTH AND SOCIAL WORK ACTIVITIES",
-    "R_S":"OTHER SERVICE ACTIVITIES"
+    "R_S":"OTHER SERVICE ACTIVITIES",
+    "R_T":"Household activities. [@@@@@]",
+    "R_U":"ACTIVITIES OF EXTRATERRITORIAL ORGANISATIONS AND BODIES",
 };
 
 class CustomTooltip extends Component {
@@ -97,6 +103,8 @@ class CustomTooltip extends Component {
             const fixedLabel = makeCorrectStringFromDate(label);
 
             var items = featureToDisplay.map((f) => {
+                console.log(f);
+                console.log(fixedPayload[f]);
 
                 let name = code_to_name[f].toLowerCase();
                 name = name.charAt(0).toUpperCase() + name.slice(1);
