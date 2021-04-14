@@ -257,7 +257,6 @@ class Covid19Form extends React.Component {
             values: [values],
         }).then(res => {
             let df = res.data.df
-            console.log(df);
             // const max_herd = Math.ceil(
             //     Math.max.apply(
             //         Math,
@@ -268,9 +267,6 @@ class Covid19Form extends React.Component {
             // )
             df.forEach(entry => (entry.Date = new Date(entry.Date)))
             // df.forEach(entry => (entry.MaxHerd_immunity = max_herd))
-
-            console.log('[+] Bonjour')
-            console.log(df);
 
             this.setState({
                 data_json_1: df,

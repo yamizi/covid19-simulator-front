@@ -97,7 +97,7 @@ class DoubleAxisGraph extends Component {
                 <h2 className='graph-title'>{this.title}</h2>
 
                 <AreaChart width={600} height={400} data={this.props.data}
-                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                    margin={{ top: 10, right: 30, left: 10, bottom: 0 }}
                     onMouseMove={(e) => this.setState({ activePoint: e.activeLabel })}
                     onMouseLeave={(e) => this.setState({ activePoint: '' })}>
 

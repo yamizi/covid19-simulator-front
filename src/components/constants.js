@@ -384,7 +384,7 @@ export const marksToApiValue = {
     "parks_m": { 'open': "yes", 'close': "no" },    
     "activity_restr": {
         'none': "open",
-        'full': "close",
+        'full': "close",    
         'mixed': "mixed"
     }
 }
@@ -392,3 +392,26 @@ export const marksToApiValue = {
 export const allSectors = ["R_A", "R_B", "R_C", "R_D", "R_E", "R_F", "R_G", "R_H", "R_I", "R_J", "R_K", "R_L", 
                            "R_M", "R_N", "R_O", "R_P", "R_Q", "R_S", "R_T", "R_U"];
 
+
+export const code_to_name = {
+    "R_A":"AGRICULTURE, FORESTRY AND FISHING",
+    "R_B":'MINING AND QUARRYING',
+    "R_C": "MANUFACTURING",
+    "R_D":"ELECTRICITY, GAS, STEAM AND AIR CONDITIONING SUPPLY",
+    "R_E":"WATER SUPPLY, SEWERAGE AND WASTE MANAGEMENT",  //complete name: WATER SUPPLY; SEWERAGE, WASTE MANAGEMENT AND REMEDIATION ACTIVITIES
+    "R_F":"CONSTRUCTION",
+    "R_G":"WHOLESALE AND RETAIL TRADE...",
+    "R_H":"TRANSPORTATION AND STORAGE",
+    "R_I":"HORECA",
+    "R_J":"INFORMATION AND COMMUNICATION",
+    "R_K":"FINANCIAL AND INSURANCE ACTIVITIES",
+    "R_L":"REAL ESTATE ACTIVITIES",
+    "R_M":"PROFESSIONAL, SCIENTIFIC AND TECHNICAL ACTIVITIES",
+    "R_N":"ADMINISTRATIVE SERVICES",
+    "R_O":"PUBLIC ADMINISTRATION AND DEFENCE",
+    "R_P":"EDUCATION",
+    "R_Q":"HUMAN HEALTH AND SOCIAL WORK ACTIVITIES",
+    "R_S":"OTHER SERVICE ACTIVITIES",
+    "R_T":"Household activities.",
+    "R_U":"ACTIVITIES OF EXTRATERRITORIAL ORGANISATIONS AND BODIES",
+};
